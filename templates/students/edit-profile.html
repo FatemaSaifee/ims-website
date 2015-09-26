@@ -1,0 +1,77 @@
+{% extends 'students/base.html' %}
+{% load staticfiles %}
+{% block content1 %}
+<h1>Profile</h1>
+<hr>
+<div class="row">
+    <div class="col-md-4">
+        <a href="portfolio-item.html">
+            <img class="img-responsive img-hover" src="{{user.profile.Picture}}" alt="">
+        </a>
+    </div>
+    <div class="col-md-8">
+    	<form action="" method="post">{% csrf_token %}
+        <table class="table">
+        {% for field in form %}
+	    	<tr>
+	    		<th>{{field.label}}</th>
+	    		<td> {{field}}</td>
+	    	</tr>
+	    {% endfor %}
+	    	
+	    </table>
+
+	    <input class="btn btn-primary" type="submit" value="Update" />
+	</div>
+</div>
+{% endblock %}
+
+<!-- Block Content -->
+<h1>Profile</h1>
+<hr>
+<div class="row">
+            <div class="col-md-4">
+                <a href="portfolio-item.html">
+                    <img class="img-responsive img-hover" src="{{user.profile.Picture}}" alt="">
+                </a>
+            </div>
+            <div class="col-md-8">
+                <table class="table">
+                	{% for field in form %}
+                	<tr>
+                		<th>{{field.label}}</th>
+                		<td> {{field}}</td>
+                	</tr>
+                	{% endfor%}
+                	<tr>
+                		<th>Father's Name</th>
+                		<td>{{ user.profile.Father_Name }}</td>
+                	</tr>
+                	<tr>
+                		<th>Mother's Name</th>
+                		<td>{{ user.profile.Mother_Name }}</td>
+                	</tr>
+                	<tr>
+                		<th>DOB</th>
+                		<td>{{ user.profile.DOB }}</td>
+                	</tr>
+                	<tr>
+                		<th>Parmanent Address</th>
+                		<td>{{ user.profile.Permanent_Address }}</td>
+                	</tr>
+                	<tr>
+                		<th>Roll Number</th>
+                		<td>{{ user.profile.Roll_Number }}</td>
+                	</tr>
+                	<tr>
+                		<th>Enrollment Number</th>
+                		<td>{{ user.profile.Enrollment_Number }}</td>
+                	</tr>
+                </table>
+            </div>
+</div>
+<a class="btn btn-primary" href="portfolio-item.html">Edit</i></a>
+<form action="" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Update" />
+</form>

@@ -1,0 +1,48 @@
+{% extends 'faculty/base.html' %}
+{% load staticfiles %}
+{% block content1 %}
+<!-- Block Content -->
+<h1>Profile</h1>
+<hr>
+<div class="row">
+            <div class="col-md-4">
+                
+                    <img class="img-responsive " src="{{user.faculty.Picture}}" alt="">
+                
+            </div>
+            <div class="col-md-8">
+                <table class="table">
+                	<tr>
+                		<th>Name</th>
+                		<td> {{user.faculty.Name }}</td>
+                	</tr>
+                	<tr>
+                		<th>Qualification</th>
+                		<td>{{ user.faculty.Qualification}}</td>
+                	</tr>
+                	<tr>
+                		<th>Designation</th>
+                		<td>{{ user.faculty.Mother_Name }}</td>
+                	</tr>
+                	<tr>
+                		<th>Joining Date</th>
+                		<td>{{ user.faculty.DOJ }}</td>
+                	</tr>
+                	<tr>
+                		<th>Previous Job</th>
+                		<td>{{ user.faculty.Permanent_Address }}</td>
+                	</tr>
+                	<!-- <tr>
+                		<th>Roll Number</th>
+                		<td>{{ user.faculty.Roll_Number }}</td>
+                	</tr> -->
+                	<tr>
+                		<th>Area of innterest</th>
+                		<td>{{ user.faculty.Area_Of_Interest }}</td>
+                	</tr>
+                </table>
+            </div>
+</div>
+<a class="btn btn-primary" href="{% url 'faculty:edit-profile' user.id %}">Edit</i></a>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "jqchat/base.html" %}
+{% block breadcrumb %}
+<li><a href="{% url 'general:home' %}">Home</a></li>
+<li><a href="{% url 'students:bulletin' %}">Student</a></li>
+<li class="active">Chatroom</li>
+
+{% endblock %}
+{% block content_jq %}
+	<h3> Select a Chat Room : </h3><br>
+		<ul>
+			{% for room in chat_rooms %}
+				<li><a href="{% url 'chat:jqchat_test_window' room.id %}">{{ room }}</a></li>
+			{% endfor %}
+		</ul>
+{% endblock %}

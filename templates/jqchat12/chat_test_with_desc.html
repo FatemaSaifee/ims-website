@@ -1,0 +1,46 @@
+{% extends "jqchat/base.html" %}
+
+{# An example chat window #}
+
+{% block extra_head %}
+{{ block.super }}
+<script type="text/javascript">
+	$(document).ready(function(){
+		InitChatWindow("{% url jqchat_test_window_with_description_ajax room.id %}", HandleRoomDescription);
+		// Initialise the custom code to POST new descriptions.
+		InitChatDescription();
+	});
+</script>
+{% endblock %}
+
+{% block body %}
+<div id="chat_left_col">
+	<h1>Test Chat Client</h1>
+	
+	<p>This is a demo of the <a href="http://code.google.com/p/django-jqchat/">
+	django-jqchat chat client</a>.</p>
+	<p>This page shows how the basic chat client can be extended: the extra field
+	<em>room description</em> can be updated from the client window and sent as part
+	of the chat client messages. Likewise, updates to the <em>room description</em>
+	elsewhere are piggybacked on to the ajax messages received from the server.</p>
+	<p>For the basic client,
+	<a href="{% url jqchat_test_window room.id %}">see here</a>.</p>
+	<p>There are 2 rooms in this demo,
+	<a href="{% url jqchat_test_window 1 %}">here</a> and 
+	<a href="{% url jqchat_test_window 2 %}">here</a>.</p>
+</div>
+
+<h2>Room name: {{ room }}</h2>
+<h2>Room description: <span id="chatroom_description"></span></h2>
+
+{% include 'jqchat/_chat_form.html' %}
+
+<form id="chatroom_description_form" method="post" action="">
+	<label for="id_description">Room description:</label>
+	<input id="id_description" type="text" name="description" maxlength="100" />
+	<input type="submit" value="Update room description" />
+</form>
+
+<script type="text/javascript">document.getElementById("msg").focus();</script>
+
+{% endblock %}

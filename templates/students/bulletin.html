@@ -1,0 +1,100 @@
+{% extends 'students/base.html' %}
+{% load staticfiles %}
+{% block content1 %}
+<!-- Block Content -->
+<!--div class="row">
+            
+  hello {{user.username}} - {{user.first_name}}  {{user.last_name}} <br>
+  D/O : {{user.profile.Father_Name}}    <br>
+  Batch : {{user.profile.Batch.Slot}}
+<ul>
+         <li>Time-Table and Announcements</li>
+			<li class=""> Email</li>
+			<li class=""> Exam Schedule</li>
+			<li> Result</li>
+			
+        </ul>
+
+
+</div-->   
+<div class="row">
+<div class="col-md-8">
+	<table class="table table-striped">
+	    <thead>
+	      <tr>
+	      	<th></th>
+	      	{% for time in user.profile.Batch.Slot.time_slot_set.all %}
+	        	<th>{{time}}</th>
+	        {% endfor %}
+	      </tr>
+	    </thead>
+	    <tbody>
+	    	
+	      <tr>
+	        <th>Monday</th>
+	        {% for item in monday %}
+	        	<td>{{ item }}</td>	
+	        {% endfor %}
+	      </tr>
+	      
+	      <tr>
+	        <th>Tuesday</th> 
+	        {% for item in tuesday %}
+	        	<td>{{ item }}</td>	
+	        {% endfor %}
+	        
+	      </tr>
+	      <tr>
+	        <th>Wednesday</th>
+	        {% for item in wednessday %}
+	        	<td>{{ item }}</td>	
+	        {% endfor %}
+	      </tr>
+	      <tr>
+	        <th>Thursday</th> 
+	        {% for item in thursday %}
+	        	<td>{{ item }}</td>	
+	        {% endfor %}
+	      </tr>
+	      <tr>
+	        <th>Friday</th> 
+	        {% for item in friday %}
+	        	<td>{{ item }}</td>	
+	        {% endfor %}
+	      </tr>
+	      <tr>
+	        <th>Saturday</th>
+	        
+	        {% for item in saturday %}
+				<td>{{ item }}</td>	
+	        {% endfor %}
+	      </tr>
+	    
+	    </tbody>
+	</table>  
+</div>
+
+<div class="col-md-4">
+	<div class="panel panel-default">
+        <div class="panel-heading">
+            <center><h4> Notice & Announcements</h4></center>
+        </div>
+        <div class="panel-body">
+            
+            {% if notification_list %}
+            
+
+                {% for notification in notification_list %}
+                <span class='glyphicon glyphicon-pushpin' ></span>
+                <a href="{{notification.Link}}" target="_blank">{{ notification.Title }} </a></br>
+                {% endfor %}
+            
+            {% else %}
+                <p>No Notification are available.</p>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

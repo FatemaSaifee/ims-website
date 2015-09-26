@@ -1,0 +1,24 @@
+{% extends "students/base.html" %}
+{% load staticfiles %}
+{% block head_title %}Chat Client{% endblock %}
+
+{% block content1 %}
+{% block extra_head %}{% endblock %}
+{% block content_jq %}{% endblock %}
+<!-- Load the JS for the chat window and start retrieving messages. -->
+<script type="text/javascript" src="{% static 'jqchat/jqchat.js' %}"></script>
+<style type="text/css">
+	/* Example styling for the chat window */
+   #chatwindow {
+     height: 250px;
+     width: 400px;
+     border: 1px solid;
+     padding: 5px;
+     margin: 10px 0;
+     overflow: auto;
+     background-color: white;
+   }
+</style>
+
+{% endblock %}
+

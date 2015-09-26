@@ -1,0 +1,49 @@
+{% extends "general/base.html" %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Login
+            
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="{% url 'general:home' %}">Home</a>
+            </li>
+            <li class="active">Login</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
+    	<div class="panel panel-default text-center">
+    		<div class="panel-heading">
+                <h3 class="panel-title">Login</h3>
+            </div>
+            <div class="panel-body">
+							
+				{% if err %}
+				<p class="error">Sorry, thats not a valid username or passwword</p>
+				{% endif %}
+
+				<form action="/accounts/auth/" method="post" >
+
+				
+				{% csrf_token %}
+				<!--label for="group">Group</label><br>
+				<input type="text" name="group" value="" id="group"><br-->
+				<label for="username">Username</label>
+				<input type="text" name="username" value="" id="username"><br>
+				<label for="password">Password</label>
+				<input type="password" name="password" value="" id="password"><br>
+				<input type="submit" value="Submit" />
+				</form>
+			</div>
+			
+		</div>
+	</div>
+	<div class="col-md-4">
+	</div>
+</div>
+{% endblock %}

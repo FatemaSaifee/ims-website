@@ -1,0 +1,48 @@
+{% extends 'students/base.html' %}
+{% load staticfiles %}
+{% block content1 %}
+<!-- Block Content -->
+<h1>Profile</h1>
+<hr>
+<div class="row">
+            <div class="col-md-4">
+                <a href="portfolio-item.html">
+                    <img class="img-responsive img-hover" src="{{user.profile.Picture}}" alt="">
+                </a>
+            </div>
+            <div class="col-md-8">
+                <table class="table">
+                	<tr>
+                		<th>Name</th>
+                		<td> {{user.first_name}}  {{user.last_name}}</td>
+                	</tr>
+                	<tr>
+                		<th>Father's Name</th>
+                		<td>{{ user.profile.Father_Name }}</td>
+                	</tr>
+                	<tr>
+                		<th>Mother's Name</th>
+                		<td>{{ user.profile.Mother_Name }}</td>
+                	</tr>
+                	<tr>
+                		<th>DOB</th>
+                		<td>{{ user.profile.DOB }}</td>
+                	</tr>
+                	<tr>
+                		<th>Parmanent Address</th>
+                		<td>{{ user.profile.Permanent_Address }}</td>
+                	</tr>
+                	<tr>
+                		<th>Roll Number</th>
+                		<td>{{ user.profile.Roll_Number }}</td>
+                	</tr>
+                	<tr>
+                		<th>Enrollment Number</th>
+                		<td>{{ user.profile.Enrollment_Number }}</td>
+                	</tr>
+                </table>
+            </div>
+</div>
+<a class="btn btn-primary" href="{% url 'students:edit-profile' user.id %}">Edit</i></a>
+
+{% endblock %}

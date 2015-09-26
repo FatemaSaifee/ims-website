@@ -1,0 +1,34 @@
+{% extends "jqchat/base.html" %}
+{% load staticfiles %}
+
+
+{# An example chat window #}
+
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		console.log("init chat window!!");
+		InitChatWindow("{% url jqchat_ajax room.id %}", null);
+	});
+</script>
+{% block body %}
+<div id="chat_left_col">
+	<h1>Test Chat Client</h1>
+	
+	<p>This is a demo of the <a href="http://code.google.com/p/django-jqchat/">
+	django-jqchat chat client</a>.</p>
+	<p>This page shows the basic client. For an example of how to extend it,
+	<a href="{% url jqchat_test_window_with_description room.id %}">see here</a>.</p>
+	<p>There are 2 rooms in this demo,
+	<a href="{% url jqchat_test_window 1 %}">here</a> and 
+	<a href="{% url jqchat_test_window 2 %}">here</a>.</p>
+</div>
+
+<h2>Room name: {{ room }}</h2>
+
+{% include 'jqchat/_chat_form.html' %}
+
+<script type="text/javascript">document.getElementById("msg").focus();</script>
+<script src="{% static 'general/mb/js/jquery.min.js' %}"></script>
+<script src="{% static 'jqchat/jqchat.js' %}"></script>
+{% endblock %}
