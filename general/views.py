@@ -167,16 +167,18 @@ def accountLogoutView(request):
 def accountRegisterView(request):
 
     if request.method == 'POST':
-
+        student_form = ProfileForm(request.POST)
+        faculty_form = FacultyForm(request.POST)
         form = MyRegistrationForm(request.POST)
         if form.is_valid():
             new_user = form.save()
             new_user.groups.add(Group.objects.get(name='account'))
             return HttpResponseRedirect("/accounts/register_success")
     else:
-        form = ProfileForm()
+        student_form = ProfileForm()
+        faculty_form = FacultyForm()
     return render(request, "general/account_register.html", {
-        'form': form,
+        'student_form': student_form, 'faculty_form': faculty_form,
     })
 
 

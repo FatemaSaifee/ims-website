@@ -113,7 +113,7 @@
 			<td>Email Address</td>
 			<td><input></td>
 		</tr>
-	{%for field in form %}
+	{%for field in student_form %}
 		<tr>
 		<td>{{ field.label }}</td>
 		<td>{{field}}</td>
@@ -121,6 +121,30 @@
 	{%endfor%}
 	</tbody> 
 	
+</table>
+<input type="submit" value="Register"/>
+
+
+<h1> Faculty Registration Form </h1>
+<table class="table table-striped">
+    
+    <tbody>
+        <tr>
+            <td>Full Name</td>
+            <td><input></td>
+        </tr>
+        <tr>
+            <td>Email Address</td>
+            <td><input></td>
+        </tr>
+    {%for field in faculty_form %}
+        <tr>
+        <td>{{ field.label }}</td>
+        <td>{{field}}</td>
+        </tr>
+    {%endfor%}
+    </tbody> 
+    
 </table>
 <input type="submit" value="Register"/>
 {%endblock%} 
