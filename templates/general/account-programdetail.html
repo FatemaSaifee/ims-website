@@ -1,0 +1,71 @@
+{% extends "general/account-program.html" %}
+
+
+{% load staticfiles %}
+
+{% block content1 %}
+
+
+
+
+		<div class="row">
+            
+            
+
+                <ul id="myTab" class="nav nav-tabs nav-justified">
+                	
+                	{% for course in program.course_set.all %}
+                	{% if forloop.counter == 1 %}
+					<li class="active"><a href="#tabs-{{ course.id }}" data-toggle="tab"><i  class="glyphicon glyphicon-education glyphicon-align-left"></i> {{ course.name }}</a></li>
+					{% else %}
+					<li class=""><a href="#tabs-{{ course.id }}"data-toggle="tab"><i class="glyphicon glyphicon-education glyphicon-align-left"></i> {{ course.name }}</a></li>
+					{% endif %}
+					{% endfor %}
+					
+
+                    
+                </ul>
+
+                <div id="myTabContent" class="tab-content">
+                	{% for course in program.course_set.all %}
+                	{% if forloop.counter == 1 %}
+					<div class="tab-pane fade active in" id="tabs-{{ course.id }}">
+					<br>
+					<p>{{ course.description|linebreaks|safe }}</p>
+
+					<hr>
+					<h4>Objective</h4>
+					<hr>
+					<p>{{ course.objective|linebreaks|safe }}</p>
+
+					<hr>
+					<h4>Learning Outcomes</h4>
+					<hr>
+					<p>{{ course.learning_outcomes|linebreaks|safe }}</p></div>
+					{% else %}
+					<div class="tab-pane fade" id="tabs-{{ course.id }}">
+					<br>
+					<p>{{ course.description|linebreaks|safe }}</p>
+					
+					<hr>
+					<h4>Objective</h4>
+					<hr>
+					<p>{{ course.objective|linebreaks|safe }}</p>
+
+					<hr>
+					<h4>Learning Outcomes</h4>
+					<hr>
+					<p>{{ course.learning_outcomes|linebreaks|safe }}</p></div>
+					
+                    {% endif %}
+					{% endfor %}
+                </div>
+
+            
+        </div>
+
+         
+
+
+
+{% endblock %}

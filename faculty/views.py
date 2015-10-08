@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from general.models import Program, Course
+from general.models import Program, Course, News, Notification, Contact
 from students.models import *
 from faculty.models import *
 from django.contrib.auth.models import User
@@ -14,8 +14,103 @@ from django.views.generic.edit import UpdateView
 # from django.utils import timezone
 from django.shortcuts import render, render_to_response
 
+# @login_required
+class HomeView(ListView):
+    model = Program
+    template_name = 'general/account-index.html'
 
-@login_required
+    def get_context_data(self, **kwargs):
+        ctx = super(HomeView, self).get_context_data(**kwargs)
+        ctx['program_list'] = Program.objects.all()
+        ctx['course_list'] = Course.objects.all()
+        ctx['news_list'] = News.objects.order_by('-pub_date')[:5]
+        ctx['notification_list']= Notification.objects.order_by('-pub_date')[:5]
+
+        
+        return ctx
+
+class ProgramView(ListView):
+    model = Program
+    template_name = 'general/account-program.html'
+
+    def get_queryset(self):
+        return Program.objects.all()
+
+
+# @login_required
+class ProgramDetailView(SingleObjectMixin, ListView):
+    
+    template_name = "general/account-programdetail.html"
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object(queryset=Program.objects.all())
+        return super(ProgramDetailView, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super(ProgramDetailView, self).get_context_data(**kwargs)
+        ctx['program_list'] = Program.objects.all()
+        ctx['course_list'] = Course.objects.all()
+
+        return ctx
+    def get_queryset(self):
+        return self.object.course_set.all()
+
+# @login_required
+class NewsView(ListView):
+    model = News
+    template_name = 'general/account-news.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(NewsView, self).get_context_data(**kwargs)
+        ctx['program_list'] = Program.objects.all()
+        ctx['course_list'] = Course.objects.all()
+
+        return ctx
+
+
+    
+# @login_required
+class NotificationView(ListView):
+    model = Notification
+    template_name = 'general/account-notification.html'
+
+    
+    def get_context_data(self, **kwargs):
+        ctx = super(NotificationView, self).get_context_data(**kwargs)
+        ctx['program_list'] = Program.objects.all()
+        ctx['course_list'] = Course.objects.all()
+
+        return ctx
+
+# @login_required
+class ContactView(ListView):
+    model = Contact
+    template_name = 'general/account-contact.html' 
+
+    def get_context_data(self, **kwargs):
+        ctx = super(ContactView, self).get_context_data(**kwargs)
+        ctx['program_list'] = Program.objects.all()
+        ctx['course_list'] = Course.objects.all()
+
+        return ctx 
+
+# @login_required
+class FacultyInfoView(ListView):
+    context_object_name= 'item_list'
+    template_name = 'faculty/account-facultyinfo.html'   
+
+    def get_queryset(self):
+        return Faculty.objects.all()
+
+    def get_context_data(self, **kwargs):
+        ctx = super(FacultyInfoView, self).get_context_data(**kwargs)
+        ctx['program_list'] = Program.objects.all()
+        ctx['course_list'] = Course.objects.all()
+
+        return ctx  
+
+
+# @login_required
 def FacultyView(request):
     context= {}
     context['program_list'] = Program.objects.all()
