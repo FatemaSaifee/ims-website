@@ -1,0 +1,48 @@
+{% extends 'general/account-base.html' %}
+{% block content %}
+{% if item_list %}
+
+		<div class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header">Our Team</h2>
+                 <ol class="breadcrumb">
+                    <li><a href="{% url 'general:home' %}">Home</a>
+                    </li>
+                    <li class="active">Faculty</li>
+                </ol>
+            </div>
+            {% for item in item_list %}
+
+            <div class="col-md-4 text-center">
+                <div class="thumbnail">
+                    <img class="img-responsive" src="{{ item.Picture }}" alt=""  width=50%>
+                    <div class="caption">
+                        <h3>{{ item.Name }}<br>
+                            <small>{{ item.Responsiblity }}</small>
+                        </h3>
+                        <h5>{{ item.Designation }}<br></h5>
+                        <h6>Area of Interest: {{ item.Area_Of_Interest }}</h6><br>
+                        <a href="{{ item.Web_Link }}"> {{ item.Name }}</a><br>
+                        <a href="{{ item.Blog_Link }}"> Blog </a>
+                        <ul class="list-inline">
+                            <li><a href="#"><i class="fa fa-2x fa-facebook-square"></i></a>
+                            </li>
+                            <li><a href="{{ item.Linkedin_Link }}"><i class="fa fa-2x fa-linkedin-square"></i></a>
+                            </li>
+                            <li><a href="{{ item.Twitter_Link }}"><i class="fa fa-2x fa-twitter-square"></i></a>
+                            </li>
+                            <li><a href="{{ item.Googleplus_Link }}"><i class="fa fa-2x fa-google-plus-square"></i>
+</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            
+{% endfor %}
+
+ {% else %}
+ no member
+ {% endif %}
+{% endblock %}
+

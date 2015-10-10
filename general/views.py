@@ -14,7 +14,127 @@ from django.views.generic.detail import SingleObjectMixin
 from django.core.context_processors import csrf
 from django.shortcuts import render_to_response
 
+class Account_HomeView(ListView):
+    model = Program
+    template_name = 'general/account-index.html'
 
+    def get_context_data(self, **kwargs):
+        ctx = super(Account_HomeView, self).get_context_data(**kwargs)
+        ctx['program_list'] = Program.objects.all()
+        ctx['course_list'] = Course.objects.all()
+        ctx['news_list'] = News.objects.order_by('-pub_date')[:5]
+        ctx['notification_list']= Notification.objects.order_by('-pub_date')[:5]
+
+        
+        return ctx
+
+class AccountProgramView(ListView):
+    model = Program
+    template_name = 'general/account-program.html'
+
+    def get_queryset(self):
+        return Program.objects.all()
+
+
+# @login_required
+class AccountProgramDetailView(SingleObjectMixin, ListView):
+    
+    template_name = "general/account-programdetail.html"
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object(queryset=Program.objects.all())
+        return super(AccountProgramDetailView, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super(AccountProgramDetailView, self).get_context_data(**kwargs)
+        ctx['program_list'] = Program.objects.all()
+        ctx['course_list'] = Course.objects.all()
+
+        return ctx
+    def get_queryset(self):
+        return self.object.course_set.all()
+
+# @login_required
+class AccountNewsView(ListView):
+    model = News
+    template_name = 'general/account-news.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(AccountNewsView, self).get_context_data(**kwargs)
+        ctx['program_list'] = Program.objects.all()
+        ctx['course_list'] = Course.objects.all()
+
+        return ctx
+
+
+    
+# @login_required
+class AccountNotificationView(ListView):
+    model = Notification
+    template_name = 'general/account-notification.html'
+
+    
+    def get_context_data(self, **kwargs):
+        ctx = super(AccountNotificationView, self).get_context_data(**kwargs)
+        ctx['program_list'] = Program.objects.all()
+        ctx['course_list'] = Course.objects.all()
+
+        return ctx
+
+# @login_required
+class AccountContactView(ListView):
+    model = Contact
+    template_name = 'general/account-contact.html' 
+
+    def get_context_data(self, **kwargs):
+        ctx = super(AccountContactView, self).get_context_data(**kwargs)
+        ctx['program_list'] = Program.objects.all()
+        ctx['course_list'] = Course.objects.all()
+
+        return ctx 
+
+# @login_required
+class AccountFacultyInfoView(ListView):
+    context_object_name= 'item_list'
+    template_name = 'general/account-facultyinfo.html'   
+
+    def get_queryset(self):
+        return Faculty.objects.all()
+
+    def get_context_data(self, **kwargs):
+        ctx = super(AccountFacultyInfoView, self).get_context_data(**kwargs)
+        ctx['program_list'] = Program.objects.all()
+        ctx['course_list'] = Course.objects.all()
+
+        return ctx  
+
+
+# # @login_required
+# def AccountFacultyView(request):
+#     context= {}
+#     context['program_list'] = Program.objects.all()
+#     context['time_slot_list'] = Time_Slot.objects.all()
+#     context['notification_list'] = Notification.objects.all().order_by('-pub_date')[:5]
+#     context['user']=request.user
+#     # time table lists
+    
+#     days = ['monday','tuesday','wednessday','thursday','friday','saturday']
+#     day_number = 0
+#     for day in days:
+#         context[day] = []
+#         day_number += 1
+#         time_table = request.user.faculty.faculty_time_table_set.filter(Day=day_number)
+#         for time in Time_Slot.objects.all():
+#             for item in time_table:
+#                 if item.Time_Slot == time:
+#                     context[day].append(item)
+#                     break
+#             else:
+#                 context[day].append('-')
+#     return render_to_response('faculty/bulletin.html', context)
+
+    #context['profile']=request.user.profile #Profile.objects.get('User'=request__user)#request.user.profile
+    
 class HomeView(ListView):
     model = Program
     template_name = 'general/index.html'
@@ -95,7 +215,7 @@ class ContactView(ListView):
 
 class FacultyInfoView(ListView):
     context_object_name= 'item_list'
-    template_name = 'faculty/facultyinfo.html'   
+    template_name = 'general/facultyinfo.html'   
 
     def get_queryset(self):
         return Faculty.objects.all()

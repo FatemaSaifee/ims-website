@@ -1,14 +1,13 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 {% load staticfiles %}
 
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="IMS">
+    <meta name="description" content="INTERNATIONAL INSTITUTE OF PROFESSIONAL STUDIES">
     <meta name="author" content="">
     
     <title>{% block title %} COLLEGE|DYNAMIC {% endblock %}</title>
@@ -23,7 +22,7 @@
     <!-- Custom Fonts -->
     <link href="{% static 'general/mb/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
 
-    <link href=" {% static 'happenings/css/calendar.css' %}" rel="stylesheet">
+    
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -34,6 +33,11 @@
 </head>
 
 <body>
+
+
+
+
+
 
 <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -46,7 +50,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{% url 'general:home' %}">HOME</a>
+                <a class="navbar-brand" href="{% url 'general:accounthome' %}">HOME</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -54,14 +58,19 @@
                     
                     
                     <li>
-                        <a href="{% url 'general:programdetail' 1 %}">Programs</a>
+                        <a href="{% url 'general:accountprogramdetail' 1 %}">Programs</a>
                     </li>
                     <li>
-                        <a href="{% url 'general:facultyinfo' %}">Faculty Information</a>
+                        <a href="{% url 'general:accountfacultyinfo' %}">Faculty Information</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'general:accountcontact' %}">Contact</a>
                     </li>
                     <li>
                         <a href="{% url 'general:accountlogout' %}">Logout</a>
                     </li>
+                   
+                    
                     
                 </ul>
             </div>
@@ -77,9 +86,12 @@
     <font color="white">....</font>
      <footer style="margin-top:10%" >
         <!-- Call to Action Section -->
+      
         
+       
+
         <!-- Footer -->
-        <center>
+        
             <div class="row">
                 <div class="col-lg-9">
                     <p>Copyright &copy; Website 2015</p>
@@ -103,7 +115,6 @@
                     
                 </div>
             </div>
-        <center>
            
             
 
@@ -112,11 +123,8 @@
    
     <!-- /.container -->
 
-    <!-- jQuery -->
-    
-
     <!-- Bootstrap Core JavaScript -->
-    
+    <script src="{% static 'general/mb/js/bootstrap.min.js' %} "></script>
 
     <!-- Script to Activate the Carousel -->
     <script>
@@ -130,9 +138,16 @@
     
     <!-- Contact Form JavaScript -->
     <!-- Do not edit these files! In order to set the email address and subject line for the contact form go to the bin/contact_me.php file. -->
+    <script language="JavaScript" type="text/javascript" src="{% static 'general/mb/js/jquery.min.js' %}"></script>
     
+    <script language="JavaScript" type="text/javascript" src="{% static 'general/mb/js/jquery.js' %}"></script>
+    
+    <script src="{% static 'general/mb/js/bootstrap.min.js' %} "></script>
 
-    <script type="text/javascript" src="{% static 'jqchat/jqchat.js' %}"></script>
+    <script src="{% static 'general/mb/js/jqBootstrapValidation.js' %}"></script>
+    
+    
+    <!-- // <script src="{% static 'jqchat/jqchat.js' %}"></script> -->
 
 </body>
 </html>
