@@ -24,8 +24,11 @@ class Account_HomeView(ListView):
         ctx['course_list'] = Course.objects.all()
         ctx['news_list'] = News.objects.order_by('-pub_date')[:5]
         ctx['notification_list']= Notification.objects.order_by('-pub_date')[:5]
-
-        
+        for group in self.request.user.groups.values_list('name',flat=True):
+            if group == 'student':
+                ctx['accountbase'] = 'students/base.html'
+            if group == 'faculty':
+                ctx['accountbase'] = 'faculty/base.html'
         return ctx
 
 class AccountProgramView(ListView):
@@ -49,6 +52,11 @@ class AccountProgramDetailView(SingleObjectMixin, ListView):
         ctx = super(AccountProgramDetailView, self).get_context_data(**kwargs)
         ctx['program_list'] = Program.objects.all()
         ctx['course_list'] = Course.objects.all()
+        for group in self.request.user.groups.values_list('name',flat=True):
+            if group == 'student':
+                ctx['accountbase'] = 'students/base.html'
+            if group == 'faculty':
+                ctx['accountbase'] = 'faculty/base.html'
 
         return ctx
     def get_queryset(self):
@@ -63,6 +71,11 @@ class AccountNewsView(ListView):
         ctx = super(AccountNewsView, self).get_context_data(**kwargs)
         ctx['program_list'] = Program.objects.all()
         ctx['course_list'] = Course.objects.all()
+        for group in self.request.user.groups.values_list('name',flat=True):
+            if group == 'student':
+                ctx['accountbase'] = 'students/base.html'
+            if group == 'faculty':
+                ctx['accountbase'] = 'faculty/base.html'
 
         return ctx
 
@@ -78,6 +91,11 @@ class AccountNotificationView(ListView):
         ctx = super(AccountNotificationView, self).get_context_data(**kwargs)
         ctx['program_list'] = Program.objects.all()
         ctx['course_list'] = Course.objects.all()
+        for group in self.request.user.groups.values_list('name',flat=True):
+            if group == 'student':
+                ctx['accountbase'] = 'students/base.html'
+            if group == 'faculty':
+                ctx['accountbase'] = 'faculty/base.html'
 
         return ctx
 
@@ -90,6 +108,11 @@ class AccountContactView(ListView):
         ctx = super(AccountContactView, self).get_context_data(**kwargs)
         ctx['program_list'] = Program.objects.all()
         ctx['course_list'] = Course.objects.all()
+        for group in self.request.user.groups.values_list('name',flat=True):
+            if group == 'student':
+                ctx['accountbase'] = 'students/base.html'
+            if group == 'faculty':
+                ctx['accountbase'] = 'faculty/base.html'
 
         return ctx 
 
@@ -105,6 +128,11 @@ class AccountFacultyInfoView(ListView):
         ctx = super(AccountFacultyInfoView, self).get_context_data(**kwargs)
         ctx['program_list'] = Program.objects.all()
         ctx['course_list'] = Course.objects.all()
+        for group in self.request.user.groups.values_list('name',flat=True):
+            if group == 'student':
+                ctx['accountbase'] = 'students/base.html'
+            if group == 'faculty':
+                ctx['accountbase'] = 'faculty/base.html'
 
         return ctx  
 
@@ -243,10 +271,10 @@ def accountAuthView(request):
     context['err'] = ['bv nb m']
     if user is not None:
         for group in user.groups.values_list('name',flat=True):
-            if group == 'staff':
-                auth.login(request, user)
-                return HttpResponseRedirect('/staff')
-            elif group == 'student':
+            # if group == 'staff':
+            #     auth.login(request, user)
+            #     return HttpResponseRedirect('/staff')
+            if group == 'student':
                 auth.login(request, user)
                 return HttpResponseRedirect('/students')
             elif group == 'faculty':

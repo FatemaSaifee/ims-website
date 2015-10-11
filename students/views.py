@@ -136,6 +136,7 @@ def FacultyView(request):
     
 @login_required
 def StudentView(request):
+
     context= {}
     context['program_list'] = Program.objects.all()
     context['time_slot_list'] = Time_Slot.objects.all()
@@ -156,6 +157,7 @@ def StudentView(request):
                     break
             else:
                 context[day].append('-')
+    
     return render_to_response('students/bulletin.html', context)
 
     #context['profile']=request.user.profile #Profile.objects.get('User'=request__user)#request.user.profile

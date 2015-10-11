@@ -30,8 +30,13 @@ def window(request, id):
     ThisRoom = get_object_or_404(Room, id=id)
     context = {}
     #context['context_instance'] = RequestContext(request)
+    for group in request.user.groups.values_list('name',flat=True):
+            if group == 'student':
+                context['accountbase'] = 'students/base.html'
+            if group == 'faculty':
+                context['accountbase'] = 'faculty/base.html'
     context['room'] = ThisRoom
-    return render_to_response('jqchat/chat_room.html', {'room': ThisRoom})#context)
+    return render_to_response('jqchat/chat_room.html', context)#{'room': ThisRoom}))
     # return render_to_response('jqchat/chat_test.html', {'room': ThisRoom},
                               # context_instance=RequestContext(request))
 
