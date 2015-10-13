@@ -34,9 +34,12 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^faculty/', include('faculty.urls',namespace = "faculty")),
     url(r'^students/', include('students.urls',namespace = "students")),
+    url(r'^accounts/', include('registration.backends.default.urls')),
     url(r'^', include('general.urls',namespace = "general")),
     # url(r'^tribune/', include('djangotribune.urls')),
     url(r'^chat/', include('jqchat.urls', namespace="chat")),
+
+
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

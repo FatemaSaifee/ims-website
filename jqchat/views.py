@@ -32,9 +32,9 @@ def window(request, id):
     #context['context_instance'] = RequestContext(request)
     for group in request.user.groups.values_list('name',flat=True):
             if group == 'student':
-                context['accountbase'] = 'students/base.html'
+                context['accountbase'] = 'students/corner-base.html'
             if group == 'faculty':
-                context['accountbase'] = 'faculty/base.html'
+                context['accountbase'] = 'faculty/corner-base.html'
     context['room'] = ThisRoom
     return render_to_response('jqchat/chat_room.html', context)#{'room': ThisRoom}))
     # return render_to_response('jqchat/chat_test.html', {'room': ThisRoom},
@@ -198,5 +198,10 @@ WindowWithDescriptionAjaxHandler = DescriptionAjax()
 @login_required
 def chat_rooms(request):
     context = {}
+    for group in request.user.groups.values_list('name',flat=True):
+        if group == 'student':
+            context['accountbase'] = 'students/corner-base.html'
+        if group == 'faculty':
+            context['accountbase'] = 'faculty/corner-base.html'
     context['chat_rooms'] = Room.objects.all()
     return render_to_response('jqchat/chat_rooms.html', context)

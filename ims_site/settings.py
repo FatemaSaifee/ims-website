@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'faculty',
     'students',
     'general',
+    'registration',
     
     
     
@@ -128,6 +129,22 @@ MEDIA_URL = '/media/'
 SESSION_COOKIE_SECURE = False
 SITE_ID = 1
 
-SOUTH_DATABASE_ADAPTERS = {
-    'default': "south.db.sqlite3"
-}
+# SOUTH_DATABASE_ADAPTERS = {
+#     'default': "south.db.sqlite3"
+# }
+
+# Registration app settings
+ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; 
+REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.
+REGISTRATION_DEFAULT_FROM_EMAIL = 'Conformation for IMS - Executives registration'#Optional. If set, emails sent through the registration app will use this string. Falls back to using Django's built-in DEFAULT_FROM_EMAIL setting.
+REGISTRATION_EMAIL_HTML = True#Optional. If this is False, registration emails will be send in plain text. If this is True, emails will be sent as HTML. Defaults to True
+# Email setup
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'ims.executives@gmail.com'
+EMAIL_HOST_PASSWORD = 'tioiragynmihkrwn' #for appname 'iloveindia'
+EMAIL_PORT = 587
+DEFAULT_FROM_EMAIL = 'ims.executives@gmail.com'
+# DEFAULT_TO_EMAIL = 'to email'
+
+LOGIN_REDIRECT_URL = '/accounts/auth/'

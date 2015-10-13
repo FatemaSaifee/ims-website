@@ -13,6 +13,7 @@ from django.views.generic.detail import SingleObjectMixin
 
 from django.core.context_processors import csrf
 from django.shortcuts import render_to_response
+import pdb
 
 class Account_HomeView(ListView):
     model = Program
@@ -268,7 +269,7 @@ def accountAuthView(request):
     password = request.POST.get('password','')
     user = auth.authenticate(username=username,password=password)
     context= {}
-    context['err'] = ['bv nb m']
+    # pdb.set_trace()
     if user is not None:
         for group in user.groups.values_list('name',flat=True):
             # if group == 'staff':
