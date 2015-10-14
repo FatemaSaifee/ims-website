@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 urlpatterns = patterns('',
 	url(r'^$', views.StudentView, name='bulletin'),
 	#url(r'^bulletin/(?P<pk>\d+)/$', views.BulletinView.as_view(), name='bulletin'),
-	url(r'^profile/$', views.ProfileView, name='profile'),
+	url(r'^profile/$', views.StudentView, name='profile'),
 	url(r'^profile/edit/(?P<id>\d+)/$', views.EditProfileView.as_view(), name='edit-profile'),
 	url(r'^shelf/$', views.ShelfView, name='shelf'),
 	url(r'^program/$', login_required(views.ProgramView.as_view()), name='program'),

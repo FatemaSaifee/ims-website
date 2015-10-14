@@ -1,10 +1,12 @@
 from django.db import models
+from faculty.models import Faculty
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from general.models import Course
-from faculty.models import Faculty
 from django.forms import ModelForm
 from django.core.urlresolvers import reverse
+from registration.models import RegistrationProfile
+
 
 # Create your models here.
 class Slot(models.Model):
@@ -28,7 +30,7 @@ class Batch(models.Model):
     def __unicode__(self):  # Python 3: def __str__(self)
         return str(self.Course.name + ' ' + self.Semester)
         
-class Profile(models.Model):
+class Student(RegistrationProfile):
     User = models.OneToOneField(User, on_delete=models.CASCADE)
     Batch = models.ForeignKey('Batch')
     Father_Name =models.CharField(max_length=200)
@@ -49,9 +51,9 @@ class Profile(models.Model):
         return reverse('students:profile')
 
 
-class ProfileForm(ModelForm):
+class StudentForm(ModelForm):
     class Meta:
-        model = Profile
+        model = Student
         exclude = ['User']#,'Batch','Father_Name','Mother_Name','DOB','Roll_Number','Enrollment_Number']
         # fields = '__all__'
         # error_messages = {

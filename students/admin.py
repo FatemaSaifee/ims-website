@@ -17,7 +17,7 @@ class SlotAdmin(admin.ModelAdmin):
 
 
 # Register your models here.
-admin.site.register(Profile)
+admin.site.register(Student)
 admin.site.register(Batch,BatchAdmin)
 admin.site.register(Slot, SlotAdmin)
 admin.site.register(Notification)

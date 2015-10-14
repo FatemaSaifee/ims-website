@@ -4,12 +4,12 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm
 # from students.models import Time_Slot
 from django.core.urlresolvers import reverse
-
+from registration.models import RegistrationProfile
 
 # Create your models here.
 #Table structure for table `Faculty_Info`
 
-class Faculty(models.Model):
+class Faculty(RegistrationProfile):
 	User = models.OneToOneField(User, on_delete=models.CASCADE)#This is the user_id from User_master table.
 	Name=models.CharField(max_length=50)
 	#Discipline =models.CharField(max_length=200)

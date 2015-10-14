@@ -20,3 +20,6 @@ def login_user(sender, user, request, **kwargs):
 
 if getattr(settings, 'REGISTRATION_AUTO_LOGIN', False):
     user_activated.connect(login_user)
+
+# by me for student aand teacher profile
+# user_registered.connect(create_profile)

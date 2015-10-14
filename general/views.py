@@ -6,7 +6,7 @@ from django.template import RequestContext,loader
 from django.views import generic
 from django.utils import timezone
 from django.contrib import auth
-from students.models import ProfileForm
+from students.models import StudentForm
 
 from django.views.generic.list import ListView
 from django.views.generic.detail import SingleObjectMixin

@@ -6,6 +6,27 @@ from django.utils.translation import ugettext_lazy as _
 from jqchat.models import Room
 
 # Create your models here.
+
+# class Profile(models.Model):
+#     #add any common fields here (first_name, last_name and email come from User)
+
+#     #perhaps add is_student or is_teacher properites here
+#     @property
+#     def is_student(self):
+#         try:
+#             self.student
+#             return True
+#         except Student.DoesNotExist:
+#             return False
+
+#     @property
+#     def is_faculty(self):
+#         try:
+#             self.faculty
+#             return True
+#         except Faculty.DoesNotExist:
+#             return False
+            
 class Program(models.Model):
 	name=models.CharField(max_length=30)
 	def __unicode__(self):  # Python 3: def __str__(self)
@@ -79,3 +100,4 @@ class ChatRoom(models.Model):
 
 	def __unicode__(self):  # Python 3: def __str__(self):
 		return self.Room
+

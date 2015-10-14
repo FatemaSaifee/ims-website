@@ -13,9 +13,14 @@ from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils import six
+from django.contrib.auth.models import User
+from students.models import Student
+from faculty.models import Faculty
+
 
 from .users import UserModel, UserModelString
 
+import pdb
 
 try:
     from django.utils.timezone import now as datetime_now
@@ -105,7 +110,23 @@ class RegistrationManager(models.Manager):
             new_user.set_password(password)
         new_user.is_active = False
         new_user.save()
+        # modified ny me 
+        instance = new_user
+        user_type =request.POST['usertype'].lower()
+        if user_type == "faculty": #user .lower for case insensitive comparison
+            Faculty(User = instance).save()
+        elif user_type == "student":
+            Student(User = instance).save()
 
+        ############### by me # assign group to profile ############ 
+        # student_group = Group.objects.get(name=student)
+        # faculty_group = Group.objects.get(name=faculty)
+        # user_group, is_created = UserGroup.get_or_create(user=new_user)
+        # user_group.group = student_group
+        # #user_group.groups.add(default_group)   # Django ver. 1.7+
+        # user_group.save()
+        ############################################################
+        # pdb.set_trace()
         registration_profile = self.create_profile(new_user)
 
         if send_email:
@@ -123,6 +144,7 @@ class RegistrationManager(models.Manager):
         pk and a random salt.
 
         """
+
         salt = hashlib.sha1(six.text_type(random.random())
                             .encode('ascii')).hexdigest()[:5]
         salt = salt.encode('ascii')
@@ -130,9 +152,12 @@ class RegistrationManager(models.Manager):
         if isinstance(user_pk, six.text_type):
             user_pk = user_pk.encode('utf-8')
         activation_key = hashlib.sha1(salt+user_pk).hexdigest()
+
         return self.create(user=user,
                            activation_key=activation_key)
 
+
+    
     def delete_expired_users(self):
         """
         Remove expired instances of ``RegistrationProfile`` and their
@@ -325,3 +350,6 @@ class RegistrationProfile(models.Model):
                 email_message.attach_alternative(message_html, 'text/html')
 
         email_message.send()
+
+
+

@@ -132,7 +132,7 @@ def FacultyView(request):
                 context[day].append('-')
     return render_to_response('faculty/bulletin.html', context)
 
-    #context['profile']=request.user.profile #Profile.objects.get('User'=request__user)#request.user.profile
+    #context['Student']=request.user.Student #Student.objects.get('User'=request__user)#request.user.Student
     
 @login_required
 def StudentView(request):
@@ -149,8 +149,8 @@ def StudentView(request):
     for day in days:
         context[day] = []
         day_number += 1
-        time_table = request.user.profile.Batch.time_table_set.filter(Day=day_number)
-        for time in request.user.profile.Batch.Slot.time_slot_set.all():
+        time_table = request.user.Student.Batch.time_table_set.filter(Day=day_number)
+        for time in request.user.Student.Batch.Slot.time_slot_set.all():
             for item in time_table:
                 if item.Time_Slot == time:
                     context[day].append(item)
@@ -160,7 +160,7 @@ def StudentView(request):
     
     return render_to_response('students/bulletin.html', context)
 
-    #context['profile']=request.user.profile #Profile.objects.get('User'=request__user)#request.user.profile
+    #context['Student']=request.user.Student #Student.objects.get('User'=request__user)#request.user.Student
     
 
     
@@ -171,41 +171,41 @@ def ShelfView(request):
     context= {}
     context['program_list'] = Program.objects.all()
     context['user']=request.user
-    context['profile']=request.user.profile #Profile.objects.get('User'=request__user)#request.user.profile
+    context['profile']=request.user.Student #Student.objects.get('User'=request__user)#request.user.Student
     context['book_list'] = Book.objects.all()
     context['question_paper_list'] = Question_Paper.objects.all()
     context['link_list'] = Link.objects.all()
     
     return render_to_response('students/shelf.html', context)
 
-def ProfileView(request):
+def StudentView(request):
     context= {}
     context['program_list'] = Program.objects.all()
     context['user']=request.user
-    context['profile']=request.user.profile #Profile.objects.get('User'=request__user)#request.user.profile
+    context['profile']=request.user.Student #Student.objects.get('User'=request__user)#request.user.Student
     
-    return render_to_response('students/profile.html', context)
+    return render_to_response('students/Student.html', context)
 
 def ChatroomView(request):
     context= {}
     context['program_list'] = Program.objects.all()
     context['user']=request.user
-    context['profile']=request.user.profile #Profile.objects.get('User'=request__user)#request.user.profile
+    context['profile']=request.user.Student #Student.objects.get('User'=request__user)#request.user.Student
     
     return render_to_response('students/classroom.html', context)
 
 class EditProfileView(UpdateView):
-    model = Profile
-    form_class = ProfileForm
+    model = Student
+    form_class = StudentForm
     template_name = 'students/edit-profile.html'
 
     def get(self, request, **kwargs):
-        self.object = Profile.objects.get(User = User.objects.get(id=self.kwargs['id']))
+        self.object = Student.objects.get(User = User.objects.get(id=self.kwargs['id']))
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         context = self.get_context_data(object=self.object, form=form)
         return self.render_to_response(context)
 
     def get_object(self, queryset=None):
-        obj = Profile.objects.get(User = User.objects.get(id=self.kwargs['id']))
+        obj = Student.objects.get(User = User.objects.get(id=self.kwargs['id']))
         return obj
