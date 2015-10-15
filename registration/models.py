@@ -14,9 +14,11 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils import six
 from django.contrib.auth.models import User
-from students.models import Student
-from faculty.models import Faculty
-
+# from students.models import Student
+# from faculty.models import Faculty
+import students
+import faculty
+# from general.models import RegistrationProfile
 
 from .users import UserModel, UserModelString
 
@@ -114,9 +116,9 @@ class RegistrationManager(models.Manager):
         instance = new_user
         user_type =request.POST['usertype'].lower()
         if user_type == "faculty": #user .lower for case insensitive comparison
-            Faculty(User = instance).save()
+            faculty.Faculty(User = instance).save()
         elif user_type == "student":
-            Student(User = instance).save()
+            students.Student(User = instance).save()
 
         ############### by me # assign group to profile ############ 
         # student_group = Group.objects.get(name=student)
@@ -209,147 +211,147 @@ class RegistrationManager(models.Manager):
                 profile.delete()
 
 
-@python_2_unicode_compatible
-class RegistrationProfile(models.Model):
-    """
-    A simple profile which stores an activation key for use during
-    user account registration.
+# @python_2_unicode_compatible
+# class RegistrationProfile(models.Model):
+#     """
+#     A simple profile which stores an activation key for use during
+#     user account registration.
 
-    Generally, you will not want to interact directly with instances
-    of this model; the provided manager includes methods
-    for creating and activating new accounts, as well as for cleaning
-    out accounts which have never been activated.
+#     Generally, you will not want to interact directly with instances
+#     of this model; the provided manager includes methods
+#     for creating and activating new accounts, as well as for cleaning
+#     out accounts which have never been activated.
 
-    While it is possible to use this model as the value of the
-    ``AUTH_PROFILE_MODULE`` setting, it's not recommended that you do
-    so. This model's sole purpose is to store data temporarily during
-    account registration and activation.
+#     While it is possible to use this model as the value of the
+#     ``AUTH_PROFILE_MODULE`` setting, it's not recommended that you do
+#     so. This model's sole purpose is to store data temporarily during
+#     account registration and activation.
 
-    """
-    user = models.OneToOneField(UserModelString(), verbose_name=_('user'))
-    activation_key = models.CharField(_('activation key'), max_length=40)
-    activated = models.BooleanField(default=False)
+#     """
+#     user = models.OneToOneField(UserModelString(), verbose_name=_('user'))
+#     activation_key = models.CharField(_('activation key'), max_length=40)
+#     activated = models.BooleanField(default=False)
 
-    objects = RegistrationManager()
+#     objects = RegistrationManager()
 
-    class Meta:
-        verbose_name = _('registration profile')
-        verbose_name_plural = _('registration profiles')
+#     class Meta:
+#         verbose_name = _('registration profile')
+#         verbose_name_plural = _('registration profiles')
 
-    def __str__(self):
-        return "Registration information for %s" % self.user
+#     def __str__(self):
+#         return "Registration information for %s" % self.user
 
-    def activation_key_expired(self):
-        """
-        Determine whether this ``RegistrationProfile``'s activation
-        key has expired, returning a boolean -- ``True`` if the key
-        has expired.
+#     def activation_key_expired(self):
+#         """
+#         Determine whether this ``RegistrationProfile``'s activation
+#         key has expired, returning a boolean -- ``True`` if the key
+#         has expired.
 
-        Key expiration is determined by a two-step process:
+#         Key expiration is determined by a two-step process:
 
-        1. If the user has already activated, ``self.activated`` will
-           be ``True``. Re-activating is not permitted, and so this
-           method returns ``True`` in this case.
+#         1. If the user has already activated, ``self.activated`` will
+#            be ``True``. Re-activating is not permitted, and so this
+#            method returns ``True`` in this case.
 
-        2. Otherwise, the date the user signed up is incremented by
-           the number of days specified in the setting
-           ``ACCOUNT_ACTIVATION_DAYS`` (which should be the number of
-           days after signup during which a user is allowed to
-           activate their account); if the result is less than or
-           equal to the current date, the key has expired and this
-           method returns ``True``.
+#         2. Otherwise, the date the user signed up is incremented by
+#            the number of days specified in the setting
+#            ``ACCOUNT_ACTIVATION_DAYS`` (which should be the number of
+#            days after signup during which a user is allowed to
+#            activate their account); if the result is less than or
+#            equal to the current date, the key has expired and this
+#            method returns ``True``.
 
-        """
-        expiration_date = datetime.timedelta(
-            days=settings.ACCOUNT_ACTIVATION_DAYS)
-        return (self.activated or
-                (self.user.date_joined + expiration_date <= datetime_now()))
-    activation_key_expired.boolean = True
+#         """
+#         expiration_date = datetime.timedelta(
+#             days=settings.ACCOUNT_ACTIVATION_DAYS)
+#         return (self.activated or
+#                 (self.user.date_joined + expiration_date <= datetime_now()))
+#     activation_key_expired.boolean = True
 
-    def send_activation_email(self, site, request=None):
-        """
-        Send an activation email to the user associated with this
-        ``RegistrationProfile``.
+#     def send_activation_email(self, site, request=None):
+#         """
+#         Send an activation email to the user associated with this
+#         ``RegistrationProfile``.
 
-        The activation email will make use of two templates:
+#         The activation email will make use of two templates:
 
-        ``registration/activation_email_subject.txt``
-            This template will be used for the subject line of the
-            email. Because it is used as the subject line of an email,
-            this template's output **must** be only a single line of
-            text; output longer than one line will be forcibly joined
-            into only a single line.
+#         ``registration/activation_email_subject.txt``
+#             This template will be used for the subject line of the
+#             email. Because it is used as the subject line of an email,
+#             this template's output **must** be only a single line of
+#             text; output longer than one line will be forcibly joined
+#             into only a single line.
 
-        ``registration/activation_email.txt``
-            This template will be used for the text body of the email.
+#         ``registration/activation_email.txt``
+#             This template will be used for the text body of the email.
 
-        ``registration/activation_email.html``
-            This template will be used for the html body of the email.
+#         ``registration/activation_email.html``
+#             This template will be used for the html body of the email.
 
-        These templates will each receive the following context
-        variables:
+#         These templates will each receive the following context
+#         variables:
 
-        ``user``
-            The new user account
+#         ``user``
+#             The new user account
 
-        ``activation_key``
-            The activation key for the new account.
+#         ``activation_key``
+#             The activation key for the new account.
 
-        ``expiration_days``
-            The number of days remaining during which the account may
-            be activated.
+#         ``expiration_days``
+#             The number of days remaining during which the account may
+#             be activated.
 
-        ``site``
-            An object representing the site on which the user
-            registered; depending on whether ``django.contrib.sites``
-            is installed, this may be an instance of either
-            ``django.contrib.sites.models.Site`` (if the sites
-            application is installed) or
-            ``django.contrib.sites.requests.RequestSite`` (if
-            not). Consult the documentation for the Django sites
-            framework for details regarding these objects' interfaces.
+#         ``site``
+#             An object representing the site on which the user
+#             registered; depending on whether ``django.contrib.sites``
+#             is installed, this may be an instance of either
+#             ``django.contrib.sites.models.Site`` (if the sites
+#             application is installed) or
+#             ``django.contrib.sites.requests.RequestSite`` (if
+#             not). Consult the documentation for the Django sites
+#             framework for details regarding these objects' interfaces.
 
-        ``request``
-            Optional Django's ``HttpRequest`` object from view.
-            If supplied will be passed to the template for better
-            flexibility via ``RequestContext``.
-        """
-        ctx_dict = {}
-        if request is not None:
-            ctx_dict = RequestContext(request, ctx_dict)
-        # update ctx_dict after RequestContext is created
-        # because template context processors
-        # can overwrite some of the values like user
-        # if django.contrib.auth.context_processors.auth is used
-        ctx_dict.update({
-            'user': self.user,
-            'activation_key': self.activation_key,
-            'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
-            'site': site,
-        })
-        subject = (getattr(settings, 'REGISTRATION_EMAIL_SUBJECT_PREFIX', '') +
-                   render_to_string(
-                       'registration/activation_email_subject.txt', ctx_dict))
-        # Email subject *must not* contain newlines
-        subject = ''.join(subject.splitlines())
-        from_email = getattr(settings, 'REGISTRATION_DEFAULT_FROM_EMAIL',
-                             settings.DEFAULT_FROM_EMAIL)
-        message_txt = render_to_string('registration/activation_email.txt',
-                                       ctx_dict)
+#         ``request``
+#             Optional Django's ``HttpRequest`` object from view.
+#             If supplied will be passed to the template for better
+#             flexibility via ``RequestContext``.
+#         """
+#         ctx_dict = {}
+#         if request is not None:
+#             ctx_dict = RequestContext(request, ctx_dict)
+#         # update ctx_dict after RequestContext is created
+#         # because template context processors
+#         # can overwrite some of the values like user
+#         # if django.contrib.auth.context_processors.auth is used
+#         ctx_dict.update({
+#             'user': self.user,
+#             'activation_key': self.activation_key,
+#             'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
+#             'site': site,
+#         })
+#         subject = (getattr(settings, 'REGISTRATION_EMAIL_SUBJECT_PREFIX', '') +
+#                    render_to_string(
+#                        'registration/activation_email_subject.txt', ctx_dict))
+#         # Email subject *must not* contain newlines
+#         subject = ''.join(subject.splitlines())
+#         from_email = getattr(settings, 'REGISTRATION_DEFAULT_FROM_EMAIL',
+#                              settings.DEFAULT_FROM_EMAIL)
+#         message_txt = render_to_string('registration/activation_email.txt',
+#                                        ctx_dict)
 
-        email_message = EmailMultiAlternatives(subject, message_txt,
-                                               from_email, [self.user.email])
+#         email_message = EmailMultiAlternatives(subject, message_txt,
+#                                                from_email, [self.user.email])
 
-        if getattr(settings, 'REGISTRATION_EMAIL_HTML', True):
-            try:
-                message_html = render_to_string(
-                    'registration/activation_email.html', ctx_dict)
-            except TemplateDoesNotExist:
-                pass
-            else:
-                email_message.attach_alternative(message_html, 'text/html')
+#         if getattr(settings, 'REGISTRATION_EMAIL_HTML', True):
+#             try:
+#                 message_html = render_to_string(
+#                     'registration/activation_email.html', ctx_dict)
+#             except TemplateDoesNotExist:
+#                 pass
+#             else:
+#                 email_message.attach_alternative(message_html, 'text/html')
 
-        email_message.send()
+#         email_message.send()
 
 
 

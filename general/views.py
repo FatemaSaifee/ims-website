@@ -1,13 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from general.models import *
-from faculty.models import *
 from django.template import RequestContext,loader
 from django.views import generic
 from django.utils import timezone
 from django.contrib import auth
-from students.models import StudentForm
 
+from .models import *
 from django.views.generic.list import ListView
 from django.views.generic.detail import SingleObjectMixin
 

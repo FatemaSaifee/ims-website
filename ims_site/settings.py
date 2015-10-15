@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'students',
     'general',
     'registration',
+    'multiform',
     
     
     

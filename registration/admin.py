@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
-from .models import RegistrationProfile
+from general.models import RegistrationProfile
 from .users import UsernameField
 from .compat import RequestSite, is_app_installed, get_site_model
 

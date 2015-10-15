@@ -5,12 +5,11 @@ except ImportError:
     from django.contrib.sites.models import get_current_site
 
 from ... import signals
-from ...models import RegistrationProfile
+from general.models import RegistrationProfile
 from ...views import ActivationView as BaseActivationView
 from ...views import RegistrationView as BaseRegistrationView
 from ...compat import RequestSite, is_app_installed
 from ...users import UserModel
-
 
 class RegistrationView(BaseRegistrationView):
     """
@@ -85,22 +84,40 @@ class RegistrationView(BaseRegistrationView):
         class of this backend as the sender.
 
         """
-        site = get_current_site(request)
+def user_add(request):
 
+    if request.method == 'POST':
+        uform = UserCreationFormExtended(request.POST)
+        pform = UserProfileForm(request.POST)
+
+        if uform.is_valid():
+
+            uform.save()
+            pform.save()
+
+            return render_to_response('user/add_success.html', context_instance=RequestContext(request))
+
+        else:
+            return render_to_response('user/add.html', { 'uform' : uform, 'pform' : pform }, context_instance=RequestContext(request))
+
+    else:
+        uform = UserCreationFormExtended()
+        pform = UserProfileForm()
+
+        return render_to_response('user/add.html', { 'uform' : uform, 'pform' : pform }, context_instance=RequestContext(request))
+        ###################################################################################33
+        site = get_current_site(request)
         if hasattr(form, 'save'):
             new_user_instance = form.save()
         else:
-            new_user_instance = (UserModel().objects
-                                 .create_user(**form.cleaned_data))
-
-
+            new_user_instance = (UserModel().objects.create_user(**form.cleaned_data))
         new_user = RegistrationProfile.objects.create_inactive_user(
             new_user=new_user_instance,
             site=site,
             send_email=self.SEND_ACTIVATION_EMAIL,
             request=request,
         )
-        new_user.groups.add('student')
+        # new_user.groups.add('student')
         signals.user_registered.send(sender=self.__class__,
                                      user=new_user,
                                      request=request)

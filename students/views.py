@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from general.models import *
 from students.models import *
+from registration.forms import StudentForm
 from django.contrib.auth.models import User
 from django.views.generic.list import ListView
 from django.views.generic.detail import SingleObjectMixin

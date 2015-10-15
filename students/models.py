@@ -1,12 +1,12 @@
 from django.db import models
-from faculty.models import Faculty
+# from apps.faculty.models import Faculty
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from general.models import Course
 from django.forms import ModelForm
 from django.core.urlresolvers import reverse
-from registration.models import RegistrationProfile
-
+# from registration.models import RegistrationProfile
+import registration
 
 # Create your models here.
 class Slot(models.Model):
@@ -22,7 +22,7 @@ class Slot(models.Model):
 class Batch(models.Model):
     Course=models.ForeignKey(Course)
     Semester=models.CharField(max_length=15)
-    Faculty =  models.ManyToManyField(Faculty, verbose_name=_('faculties'), blank=True
+    Faculty =  models.ManyToManyField('general.Faculty', verbose_name=_('faculties'), blank=True
     )
     Room_Number = models.CharField(max_length=5)
     Slot =models.ForeignKey(Slot)
@@ -30,38 +30,7 @@ class Batch(models.Model):
     def __unicode__(self):  # Python 3: def __str__(self)
         return str(self.Course.name + ' ' + self.Semester)
         
-class Student(RegistrationProfile):
-    User = models.OneToOneField(User, on_delete=models.CASCADE)
-    Batch = models.ForeignKey('Batch')
-    Father_Name =models.CharField(max_length=200)
-    Mother_Name =models.CharField(max_length=200)
-    DOB= models.DateField(max_length=200)
-    Local_Address =models.CharField(max_length=200,default=None,blank=True)
-    Permanent_Address =models.CharField(max_length=200,default = None)
-    Mobile_Number =models.CharField(max_length=15,blank=True)
-    Telephone_Number =models.CharField(max_length=200,default=None,blank=True)
-    Roll_Number =models.CharField(max_length=200,default = None)
-    Enrollment_Number =models.CharField(max_length=200,default=None)
-    Picture=models.URLField(default=None,blank=True)
 
-    def __unicode__(self):  # Python 3: def __str__(self):
-        return self.User.username
-
-    def get_absolute_url(self):
-        return reverse('students:profile')
-
-
-class StudentForm(ModelForm):
-    class Meta:
-        model = Student
-        exclude = ['User']#,'Batch','Father_Name','Mother_Name','DOB','Roll_Number','Enrollment_Number']
-        # fields = '__all__'
-        # error_messages = {
-        #     NON_FIELD_ERRORS: {
-        #         'unique_together': "%(model_name)s's %(field_labels)s are not unique.",
-        #     }
-        # }
-        
     
 
 
@@ -90,7 +59,7 @@ class Time_Table(models.Model):
     Time_Slot = models.ForeignKey(Time_Slot)
     Subject = models.CharField(max_length=20)
     Subject_Id = models.CharField(max_length=10)
-    Faculty = models.ForeignKey(Faculty)
+    Faculty = models.ForeignKey('general.Faculty')
     Batch = models.ForeignKey(Batch)
 
     def __unicode__(self):  # Python 3: def __str__(self):

@@ -16,6 +16,49 @@ from .compat import import_string
 
 import pdb;
 
+# from multiform import MultiModelForm
+
+# class StudentRegistrationForm(MultiModelForm):
+#     base_forms = [
+#         ('student', StudentForm),
+#         ('user', RegistrationProfile),
+#     ]
+
+#     def dispatch_init_instance(self, name, instance):
+#         if name == 'student':
+#             return instance
+#         return super(StudentRegistrationForm, self).dispatch_init_instance(name, instance)
+
+#     def save(self, commit=True):
+#         """Save both forms and attach the user to the person."""
+#         instances = super(StudentRegistrationForm, self).save(commit=False)
+#         instances['student'].user = instances['user']
+#         if commit:
+#             for instance in instances.values():
+#                 instance.save()
+#         return instances
+
+# class FacultyRegistrationForm(MultiModelForm):
+#     base_forms = [
+#         ('faculty', FacultyForm),
+#         ('user', RegistrationProfile),
+#     ]
+
+#     def dispatch_init_instance(self, name, instance):
+#         if name == 'faculty':
+#             return instance
+#         return super(FacultyRegistrationForm, self).dispatch_init_instance(name, instance)
+
+#     def save(self, commit=True):
+#         """Save both forms and attach the user to the person."""
+#         instances = super(FacultyRegistrationForm, self).save(commit=False)
+#         instances['faculty'].user = instances['user']
+#         if commit:
+#             for instance in instances.values():
+#                 instance.save()
+#         return instances
+
+
 REGISTRATION_FORM_PATH = getattr(settings, 'REGISTRATION_FORM',
                                  'registration.forms.RegistrationForm')
 REGISTRATION_FORM = import_string(REGISTRATION_FORM_PATH)
@@ -68,6 +111,28 @@ class _RequestPassingFormView(FormView):
 
 
 class RegistrationView(_RequestPassingFormView):
+
+    def user_add(request):
+
+    if request.method == 'POST':
+        uform = UserCreationFormExtended(request.POST)
+        pform = UserProfileForm(request.POST)
+
+        if uform.is_valid():
+
+            uform.save()
+            pform.save()
+
+            return render_to_response('user/add_success.html', context_instance=RequestContext(request))
+
+        else:
+            return render_to_response('user/add.html', { 'uform' : uform, 'pform' : pform }, context_instance=RequestContext(request))
+
+    else:
+        uform = UserCreationFormExtended()
+        pform = UserProfileForm()
+
+        return render_to_response('user/add.html', { 'uform' : uform, 'pform' : pform }, context_instance=RequestContext(request))
     """
     Base class for user registration views.
 

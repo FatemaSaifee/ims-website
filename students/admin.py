@@ -1,5 +1,6 @@
 from django.contrib import admin
 from students.models import *
+from general.models import Student
 
 class TimeTableInLine(admin.TabularInline):
 	model = Time_Table

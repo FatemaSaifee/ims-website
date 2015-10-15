@@ -1,7 +1,8 @@
 from django.http import HttpResponse
 from general.models import Program, Course, News, Notification, Contact
 from students.models import *
-from faculty.models import *
+from general.models import *
+from registration.forms import FacultyForm
 from django.contrib.auth.models import User
 from django.views.generic.list import ListView
 from django.views.generic.detail import SingleObjectMixin

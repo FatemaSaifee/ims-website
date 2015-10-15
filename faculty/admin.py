@@ -1,5 +1,6 @@
 from django.contrib import admin
-from faculty.models import *
+from faculty.models import Faculty_Time_Table
+from general.models import Faculty
 
 # Register your models here.
 

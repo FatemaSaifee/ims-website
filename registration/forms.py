@@ -13,8 +13,13 @@ from __future__ import unicode_literals
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.forms import UserCreationForm
-
+from django.forms import ModelForm
+from general.models import Student, Faculty
 from .users import UserModel, UsernameField
+
+# for multiple forms (registrationprofile, faculty, student) in class based form view
+from multiform import MultiForm
+
 
 User = UserModel()
 
@@ -34,11 +39,27 @@ class RegistrationForm(UserCreationForm):
     """
     required_css_class = 'required'
     email = forms.EmailField(label=_("E-mail"))
-    group = forms.CharField(label = ("Category"))
+    # group = forms.CharField(label = ("Category"))
     class Meta:
-        model = User
-        fields = (UsernameField(), "email","group")
+        model = Student
+        fields = '__all__'#(UsernameField(), "email")#,"group")
 
+class FacultyForm(ModelForm):
+    class Meta:
+        model = Faculty
+        exclude = ['User']
+
+class StudentForm(ModelForm):
+    class Meta:
+        model = Student
+        exclude = ['User','Batch']#,'Batch','Father_Name','Mother_Name','DOB','Roll_Number','Enrollment_Number']
+        # fields = '__all__'
+        # error_messages = {
+        #     NON_FIELD_ERRORS: {
+        #         'unique_together': "%(model_name)s's %(field_labels)s are not unique.",
+        #     }
+        # }
+        
 
 class RegistrationFormTermsOfService(RegistrationForm):
     """
