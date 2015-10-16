@@ -11,6 +11,7 @@ from ...views import RegistrationView as BaseRegistrationView
 from ...compat import RequestSite, is_app_installed
 from ...users import UserModel
 
+import pdb
 class RegistrationView(BaseRegistrationView):
     """
     A registration backend which follows a simple workflow:
@@ -84,39 +85,42 @@ class RegistrationView(BaseRegistrationView):
         class of this backend as the sender.
 
         """
-def user_add(request):
+# def user_add(request):
 
-    if request.method == 'POST':
-        uform = UserCreationFormExtended(request.POST)
-        pform = UserProfileForm(request.POST)
+#     if request.method == 'POST':
+#         uform = UserCreationFormExtended(request.POST)
+#         pform = UserProfileForm(request.POST)
 
-        if uform.is_valid():
+#         if uform.is_valid():
 
-            uform.save()
-            pform.save()
+#             uform.save()
+#             pform.save()
 
-            return render_to_response('user/add_success.html', context_instance=RequestContext(request))
+#             return render_to_response('user/add_success.html', context_instance=RequestContext(request))
 
-        else:
-            return render_to_response('user/add.html', { 'uform' : uform, 'pform' : pform }, context_instance=RequestContext(request))
+#         else:
+#             return render_to_response('user/add.html', { 'uform' : uform, 'pform' : pform }, context_instance=RequestContext(request))
 
-    else:
-        uform = UserCreationFormExtended()
-        pform = UserProfileForm()
+#     else:
+#         uform = UserCreationFormExtended()
+#         pform = UserProfileForm()
 
-        return render_to_response('user/add.html', { 'uform' : uform, 'pform' : pform }, context_instance=RequestContext(request))
+#         return render_to_response('user/add.html', { 'uform' : uform, 'pform' : pform }, context_instance=RequestContext(request))
         ###################################################################################33
         site = get_current_site(request)
         if hasattr(form, 'save'):
-            new_user_instance = form.save()
+            new_user_instance = form.save()['user']
+            # pdb.set_trace()
         else:
             new_user_instance = (UserModel().objects.create_user(**form.cleaned_data))
+            
         new_user = RegistrationProfile.objects.create_inactive_user(
             new_user=new_user_instance,
             site=site,
             send_email=self.SEND_ACTIVATION_EMAIL,
             request=request,
         )
+        pdb.set_trace()
         # new_user.groups.add('student')
         signals.user_registered.send(sender=self.__class__,
                                      user=new_user,

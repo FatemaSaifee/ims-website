@@ -18,6 +18,7 @@ from django.contrib.auth.models import User
 # from faculty.models import Faculty
 import students
 import faculty
+import general
 # from general.models import RegistrationProfile
 
 from .users import UserModel, UserModelString
@@ -106,19 +107,37 @@ class RegistrationManager(models.Manager):
         it will be passed to the email template.
 
         """
+        # pdb.set_trace()
         if new_user is None:
             password = user_info.pop('password')
             new_user = UserModel()(**user_info)
             new_user.set_password(password)
         new_user.is_active = False
+        # pdb.set_trace()
         new_user.save()
-        # modified ny me 
-        instance = new_user
-        user_type =request.POST['usertype'].lower()
-        if user_type == "faculty": #user .lower for case insensitive comparison
-            faculty.Faculty(User = instance).save()
-        elif user_type == "student":
-            students.Student(User = instance).save()
+        # new_user['student'].save()
+
+        registration_profile = self.create_profile(new_user)
+        pdb.set_trace()
+        if send_email:
+            pdb.set_trace()
+            registration_profile.send_activation_email(site, request)
+
+        return new_user
+
+        # if new_user is None:
+        #     password = user_info.pop('password')
+        #     new_user = UserModel()(**user_info)
+        #     new_user.set_password(password)
+        # new_user.is_active = False
+        # new_user.save()
+        # # modified ny me 
+        # instance = new_user
+        # user_type =request.POST['usertype'].lower()
+        # if user_type == "faculty": #user .lower for case insensitive comparison
+        #     faculty.Faculty(User = instance).save()
+        # elif user_type == "student":
+        #     students.Student(User = instance).save()
 
         ############### by me # assign group to profile ############ 
         # student_group = Group.objects.get(name=student)
@@ -129,12 +148,7 @@ class RegistrationManager(models.Manager):
         # user_group.save()
         ############################################################
         # pdb.set_trace()
-        registration_profile = self.create_profile(new_user)
-
-        if send_email:
-            registration_profile.send_activation_email(site, request)
-
-        return new_user
+        
 
     def create_profile(self, user):
         """
@@ -153,10 +167,12 @@ class RegistrationManager(models.Manager):
         user_pk = str(user.pk)
         if isinstance(user_pk, six.text_type):
             user_pk = user_pk.encode('utf-8')
+      
         activation_key = hashlib.sha1(salt+user_pk).hexdigest()
-
-        return self.create(user=user,
-                           activation_key=activation_key)
+        a = self.get_or_create(user=user)
+                           # activation_key=activation_key)
+        pdb.set_trace()
+        return a
 
 
     

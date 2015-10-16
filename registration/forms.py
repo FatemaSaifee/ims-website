@@ -9,6 +9,17 @@ you're using a custom model.
 """
 from __future__ import unicode_literals
 
+# to remove ValueError: Cannot assign "...": "MyRelatedModel" instance isn't saved in the database.
+import contextlib
+
+@contextlib.contextmanager
+def allow_unsaved(model, field):
+    model_field = model._meta.get_field(field)
+    saved = model_field.allow_unsaved_instance_assignment
+    model_field.allow_unsaved_instance_assignment = True
+    yield
+    model_field.allow_unsaved_instance_assignment = saved
+
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
@@ -18,13 +29,24 @@ from general.models import Student, Faculty
 from .users import UserModel, UsernameField
 
 # for multiple forms (registrationprofile, faculty, student) in class based form view
-from multiform import MultiForm
+from multiform import MultiModelForm
+import pdb
 
 
 User = UserModel()
 
+class StudentForm(ModelForm):
+    class Meta:
+        model = Student
+        exclude = ['user','activation_key','activated']#,'Batch','Father_Name','Mother_Name','DOB','Roll_Number','Enrollment_Number']
+        # fields = '__all__'
+        # error_messages = {
+        #     NON_FIELD_ERRORS: {
+        #         'unique_together': "%(model_name)s's %(field_labels)s are not unique.",
+        #     }
+        # }
 
-class RegistrationForm(UserCreationForm):
+class RegistrationForm(MultiModelForm):
     """
     Form for registering a new user account.
 
@@ -37,28 +59,74 @@ class RegistrationForm(UserCreationForm):
     registration backend.
 
     """
-    required_css_class = 'required'
-    email = forms.EmailField(label=_("E-mail"))
-    # group = forms.CharField(label = ("Category"))
-    class Meta:
-        model = Student
-        fields = '__all__'#(UsernameField(), "email")#,"group")
+    # required_css_class = 'required'
+    # email = forms.EmailField(label=_("E-mail"))
+    # # group = forms.CharField(label = ("Category"))
+    # class Meta:
+    #     model = Student
+    #     fields = '__all__'#(UsernameField(), "email")#,"group")
+    # form_classes = {
+    #     'user': UserCreationForm,
+    #     'student': StudentForm,
+    # }
+
+    # def save(self, commit=True):
+    #     objects = super(RegistrationForm, self).save(commit=False)
+
+    #     if commit:
+    #         user = objects['user']
+    #         user.save()
+    #         profile = objects['student']
+    #         profile.user = user
+    #         profile.save()
+
+    #     return objects
+    base_forms = [
+            
+            ('student', StudentForm),
+            ('user', UserCreationForm),
+        ]
+
+    def dispatch_init_instance(self, name, instance):
+        if name == 'student':
+            return instance
+        return super(RegistrationForm, self).dispatch_init_instance(name, instance)
+
+    def save(self, commit=True):
+        """Save both forms and attach the user to the person."""
+        instances = super(RegistrationForm, self).save(commit=False)
+        with allow_unsaved(Student, 'user'):
+            instances['student'].user = instances['user']
+        # instances['student'].user = instances['user']
+        if commit:
+            user = instances['user']
+            user.save()
+            profile = instances['student']
+            profile.user = user
+            profile.save()
+            # for instance in instances.values():
+            #     # instance.user_id = 1
+            #     instance.save()
+        return instances
+
+    # def save(self, **kwargs):
+    #     users = User.objects.filter(pk__in=kwargs.get('users', None))
+    #     roles = Role.objects.filter(pk__in=kwargs.get('roles', None))
+    #     project = kwargs.get('project', None)
+
+    #     for user in users:
+    #         member, created = Member.objects.get_or_create(project=project, user=user)
+    #         if created:
+    #             for role in roles:
+    #                 member.roles.add(role)
+
 
 class FacultyForm(ModelForm):
     class Meta:
         model = Faculty
         exclude = ['User']
 
-class StudentForm(ModelForm):
-    class Meta:
-        model = Student
-        exclude = ['User','Batch']#,'Batch','Father_Name','Mother_Name','DOB','Roll_Number','Enrollment_Number']
-        # fields = '__all__'
-        # error_messages = {
-        #     NON_FIELD_ERRORS: {
-        #         'unique_together': "%(model_name)s's %(field_labels)s are not unique.",
-        #     }
-        # }
+
         
 
 class RegistrationFormTermsOfService(RegistrationForm):

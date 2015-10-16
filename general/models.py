@@ -8,7 +8,12 @@ from django.utils.encoding import python_2_unicode_compatible
 from registration.users import UserModel, UserModelString
 from registration.models import RegistrationManager
 from django.forms import ModelForm
+from ims_site import settings
 	
+try:
+    from django.utils.timezone import now as datetime_now
+except ImportError:
+    datetime_now = datetime.datetime.now
 
 # Create your models here.
 
@@ -49,7 +54,8 @@ class RegistrationProfile(models.Model):
     account registration and activation.
 
     """
-    user = models.OneToOneField(UserModelString(), verbose_name=_('user'))
+    # user = models.OneToOneField(UserModelString(), verbose_name=_('user'), null = True)
+    user = models.OneToOneField(User)
     activation_key = models.CharField(_('activation key'), max_length=40)
     activated = models.BooleanField(default=False)
 
@@ -236,7 +242,7 @@ class Student(RegistrationProfile):
     Picture=models.URLField(default=None,blank=True)
 
     def __unicode__(self):  # Python 3: def __str__(self):
-        return self.User.username
+        return self.user.username
 
     def get_absolute_url(self):
         return reverse('students:profile')
