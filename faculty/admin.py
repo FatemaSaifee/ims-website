@@ -10,6 +10,7 @@ class TimeTableInLine(admin.TabularInline):
 
 class FacultyAdmin(admin.ModelAdmin):
 	inlines = [TimeTableInLine]
+	list_display = ('user', 'activation_key_expired','verified')
 
 admin.site.register(Faculty, FacultyAdmin)
 

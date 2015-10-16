@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content1 %}
-<script type="text/javascript" src="{% static 'general/mb/js/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'general/mb/js/jquery.min.js'%}"></script>
 <script type="text/javascript" src="{% static 'jqchat/jqchat.js' %}"></script>
 
 
@@ -19,7 +19,8 @@
 <div id="chatwindow"><span id="loading">Loading...</span></div>
 <div id="memberswindow"></div>
 <div class="clear"></div>
-<form id="chatform">
+<form id="chatform" method="post">
+{% csrf_token %}
 	<label for="msg">Message:</label>
 	<input type="text" id="msg" />
 	<input type="submit" value="Send message" /><br />
@@ -46,7 +47,7 @@
 		
 	$(document).ready(function(){
 		
-		InitChatWindow("{% url 'chat:jqchat_ajax' room.id %}", null);
+		InitChatWindow("{% url 'chat:jqchat_ajax' room.id %}", null, "{% csrf_token %}");
 
 	});
 </script>

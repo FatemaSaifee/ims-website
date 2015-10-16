@@ -37,7 +37,8 @@
 <div id="chatwindow"><span id="loading">Loading...</span></div>
 <div id="memberswindow"></div>
 <div class="clear"></div>
-<form id="chatform">
+<form id="chatform" method="POST">
+{% csrf_token %}
 	<label for="msg">Message:</label>
 	<input type="text" id="msg" />
 	<input type="submit" value="Send message" /><br />

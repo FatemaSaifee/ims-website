@@ -267,18 +267,36 @@ def accountAuthView(request):
     password = request.POST.get('password','')
     user = auth.authenticate(username=username,password=password)
     context= {}
+    context.update(csrf(request))
     # pdb.set_trace()
     if user is not None:
-        for group in user.groups.values_list('name',flat=True):
-            # if group == 'staff':
-            #     auth.login(request, user)
-            #     return HttpResponseRedirect('/staff')
-            if group == 'student':
-                auth.login(request, user)
-                return HttpResponseRedirect('/students')
-            elif group == 'faculty':
-                auth.login(request, user)
-                return HttpResponseRedirect('/faculty')
+        try:
+            Student.objects.get(user=request.user)
+            is_student = True
+        except Student.DoesNotExist:
+            is_student = False
+        try:
+            Faculty.objects.get(user=request.user)
+            is_faculty = True
+        except Faculty.DoesNotExist:
+            is_faculty = False
+        # pdb.set_trace()
+        if is_student == True:
+            auth.login(request, user)
+            return HttpResponseRedirect('/students')
+        elif is_faculty == True:
+            auth.login(request, user)
+            return HttpResponseRedirect('/faculty')
+        # for group in user.groups.values_list('name',flat=True):
+        #     # if group == 'staff':
+        #     #     auth.login(request, user)
+        #     #     return HttpResponseRedirect('/staff')
+        #     if group == 'student':
+        #         auth.login(request, user)
+        #         return HttpResponseRedirect('/students')
+        #     elif group == 'faculty':
+        #         auth.login(request, user)
+        #         return HttpResponseRedirect('/faculty')
     return HttpResponseRedirect('/accounts/invalid/')
     #         else :
     #             return HttpResponseRedirect('/accounts/invalid')

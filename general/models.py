@@ -9,11 +9,16 @@ from registration.users import UserModel, UserModelString
 from registration.models import RegistrationManager
 from django.forms import ModelForm
 from ims_site import settings
-	
+from django.template import RequestContext, TemplateDoesNotExist
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
+from django.core.urlresolvers import reverse
+
 try:
     from django.utils.timezone import now as datetime_now
 except ImportError:
     datetime_now = datetime.datetime.now
+# import pdb
 
 # Create your models here.
 
@@ -36,7 +41,12 @@ except ImportError:
 #             return True
 #         except Faculty.DoesNotExist:
 #             return False
-            
+class Program(models.Model):
+	name=models.CharField(max_length=30)
+	def __unicode__(self):  # Python 3: def __str__(self)
+		return self.name
+    
+
 @python_2_unicode_compatible
 class RegistrationProfile(models.Model):
     """
@@ -58,7 +68,7 @@ class RegistrationProfile(models.Model):
     user = models.OneToOneField(User)
     activation_key = models.CharField(_('activation key'), max_length=40)
     activated = models.BooleanField(default=False)
-
+    verified = models.BooleanField(default=False)
     objects = RegistrationManager()
 
     class Meta:
@@ -183,7 +193,7 @@ class RegistrationProfile(models.Model):
         message_txt = render_to_string('registration/activation_email.txt',
                                        ctx_dict)
 
-        email_message = EmailMultiAlternatives(subject, message_txt,
+        email_message = EmailMultiAlternatives (subject, message_txt,
                                                from_email, [self.user.email])
 
         if getattr(settings, 'REGISTRATION_EMAIL_HTML', True):
@@ -194,7 +204,7 @@ class RegistrationProfile(models.Model):
                 pass
             else:
                 email_message.attach_alternative(message_html, 'text/html')
-
+        # pdb.set_trace()
         email_message.send()
 
 class Faculty(RegistrationProfile):
@@ -221,12 +231,9 @@ class Faculty(RegistrationProfile):
 	def get_absolute_url(self):
 		return reverse('faculty:profile')
 
+	objects = RegistrationManager()
 
 
-class Program(models.Model):
-	name=models.CharField(max_length=30)
-	def __unicode__(self):  # Python 3: def __str__(self)
-		return self.name
 
 class Student(RegistrationProfile):
     Batch = models.ForeignKey('students.Batch')
@@ -247,6 +254,7 @@ class Student(RegistrationProfile):
     def get_absolute_url(self):
         return reverse('students:profile')
 
+    objects = RegistrationManager()
 
 
 

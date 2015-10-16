@@ -24,7 +24,7 @@ from django.conf import settings
 from django.views.generic.base import TemplateView
 
 from .views import ActivationView
-from .views import RegistrationView
+from .views import RegistrationView, FacultyRegistrationView
 
 
 urlpatterns = patterns('',
@@ -51,6 +51,9 @@ if getattr(settings, 'INCLUDE_REGISTER_URL', True):
         url(r'^register/$',
             RegistrationView.as_view(),
             name='registration_register'),
+         url(r'^faculty/register/$',
+            FacultyRegistrationView.as_view(),
+            name='faculty_registration_register'),
     )
 
 if getattr(settings, 'INCLUDE_AUTH_URLS', True):

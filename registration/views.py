@@ -14,10 +14,15 @@ from .compat import import_string
 # from .forms import RegistrationForm
 # from . import signals
 
+import pdb 
+
+FACULTY_REGISTRATION_FORM_PATH = getattr(settings, 'REGISTRATION_FORM',
+                                 'registration.forms.FacultyRegistrationForm')
+FACULTY_REGISTRATION_FORM = import_string(FACULTY_REGISTRATION_FORM_PATH)
+
 REGISTRATION_FORM_PATH = getattr(settings, 'REGISTRATION_FORM',
                                  'registration.forms.RegistrationForm')
 REGISTRATION_FORM = import_string(REGISTRATION_FORM_PATH)
-
 
 class _RequestPassingFormView(FormView):
     """
@@ -56,6 +61,7 @@ class _RequestPassingFormView(FormView):
     def get_success_url(self, request=None, user=None):
         # We need to be able to use the request and the new user when
         # constructing success_url.
+        # pdb.set_trace()
         return super(_RequestPassingFormView, self).get_success_url()
 
     def form_valid(self, form, request=None):
@@ -96,8 +102,10 @@ class RegistrationView(_RequestPassingFormView):
         # tells us which one it is.
         try:
             to, args, kwargs = success_url
+            # pdb.set_trace()
             return redirect(to, *args, **kwargs)
         except ValueError:
+            # pdb.set_trace()
             return redirect(success_url)
 
     def registration_allowed(self, request):
@@ -117,6 +125,59 @@ class RegistrationView(_RequestPassingFormView):
         """
         raise NotImplementedError
 
+class FacultyRegistrationView(_RequestPassingFormView):
+    """
+    Base class for user registration views.
+
+    """
+    disallowed_url = 'registration_disallowed'
+    form_class = FACULTY_REGISTRATION_FORM
+    http_method_names = ['get', 'post', 'head', 'options', 'trace']
+    success_url = None
+    template_name = 'registration/faculty_registration_form.html'
+
+    @method_decorator(sensitive_post_parameters('password1', 'password2'))
+    def dispatch(self, request, *args, **kwargs):
+        """
+        Check that user signup is allowed before even bothering to
+        dispatch or do other processing.
+
+        """
+        if not self.registration_allowed(request):
+            return redirect(self.disallowed_url)
+        return super(FacultyRegistrationView, self).dispatch(request, *args, **kwargs)
+
+    def form_valid(self, request, form):
+        new_user = self.register(request, form)
+        success_url = self.get_success_url(request, new_user)
+
+        # success_url may be a simple string, or a tuple providing the
+        # full argument set for redirect(). Attempting to unpack it
+        # tells us which one it is.
+        try:
+            to, args, kwargs = success_url
+            # pdb.set_trace()
+            return redirect(to, *args, **kwargs)
+        except ValueError:
+            # pdb.set_trace()
+            return redirect(success_url)
+
+    def registration_allowed(self, request):
+        """
+        Override this to enable/disable user registration, either
+        globally or on a per-request basis.
+
+        """
+        return True
+
+    def register(self, request, form):
+        """
+        Implement user-registration logic here. Access to both the
+        request and the full cleaned_data of the registration form is
+        available here.
+
+        """
+        raise NotImplementedError
 
 class ActivationView(TemplateView):
     """

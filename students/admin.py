@@ -16,9 +16,11 @@ class TimeSlotInLine(admin.TabularInline):
 class SlotAdmin(admin.ModelAdmin):
 	inlines = [TimeSlotInLine]
 
+class StudentAdmin(admin.ModelAdmin):
+	list_display = ('user', 'activation_key_expired','verified')
 
 # Register your models here.
-admin.site.register(Student)
+admin.site.register(Student, StudentAdmin)
 admin.site.register(Batch,BatchAdmin)
 admin.site.register(Slot, SlotAdmin)
 admin.site.register(Notification)

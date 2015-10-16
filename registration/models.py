@@ -6,14 +6,14 @@ import random
 import re
 
 from django.conf import settings
-from django.core.mail import EmailMultiAlternatives
+# from django.core.mail import EmailMultiAlternatives
 from django.db import models
-from django.template import RequestContext, TemplateDoesNotExist
-from django.template.loader import render_to_string
+# from django.template import RequestContext, TemplateDoesNotExist
+# from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
-from django.utils.encoding import python_2_unicode_compatible
+# from django.utils.encoding import python_2_unicode_compatible
 from django.utils import six
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 # from students.models import Student
 # from faculty.models import Faculty
 import students
@@ -43,6 +43,13 @@ class RegistrationManager(models.Manager):
     keys), and for cleaning out expired inactive accounts.
 
     """
+    # def verify_user(self, user):
+    #     """
+    #     verifies the user
+
+    #     If veried the `True`
+    #     """
+    #     user = self.
     def activate_user(self, activation_key):
         """
         Validate an activation key and activate the corresponding
@@ -118,9 +125,9 @@ class RegistrationManager(models.Manager):
         # new_user['student'].save()
 
         registration_profile = self.create_profile(new_user)
-        pdb.set_trace()
+        # pdb.set_trace()
         if send_email:
-            pdb.set_trace()
+            # pdb.set_trace()
             registration_profile.send_activation_email(site, request)
 
         return new_user
@@ -169,10 +176,14 @@ class RegistrationManager(models.Manager):
             user_pk = user_pk.encode('utf-8')
       
         activation_key = hashlib.sha1(salt+user_pk).hexdigest()
-        a = self.get_or_create(user=user)
-                           # activation_key=activation_key)
-        pdb.set_trace()
+        a, created = self.get_or_create(user=user)#,
+        a.activation_key=activation_key
+        a.save()
+        # pdb.set_trace()
         return a
+# a.user
+# self = general.Student.objects
+# user = vhvdfvvfddfgr
 
 
     

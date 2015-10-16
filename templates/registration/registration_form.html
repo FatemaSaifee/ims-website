@@ -18,27 +18,90 @@
         </ol>
     </div>
 </div>
-
 <div class="row">
+            
+            
+
+                <ul id="myTab" class="nav nav-tabs nav-justified">
+                	
+					<li class="active"><a href="#tabs-1" data-toggle="tab"><i  class="glyphicon glyphicon-education glyphicon-align-left"></i> Student </a></li>
+					<li class=""><a href="{% url 'faculty_registration_register' %}" ><i class="glyphicon glyphicon-education glyphicon-align-left"></i> Faculty </a></li>
+					<!-- <li class=""><a href="https://www.google.com/" data-toggle="tab"><i class="glyphicon glyphicon-education glyphicon-align-left"></i> Faculty </a></li> -->
+					
+					
+
+                    
+                </ul>
+
+                <div id="myTabContent" class="tab-content">
+                	<br>
+					<div class="tab-pane fade active in" id="tabs-1">
+						<div id = 'forms'>
+								<div class="col-md-2">
+								</div>
+
+								<div class="col-md-8">
+									<div class="panel panel-default text-center">
+							    		<div class="panel-heading">
+							                <h3 class="panel-title"> Student Register</h3>
+										</div>
+										<div class="panel-body">
+											<form method="post" action="">
+											    {% csrf_token %}
+											    <center>
+												    <table>
+													    {% for field in form %}
+													    	<tr>
+													    		<th>{{field.label}}</th>
+													    		<td>{{field}}</td>
+
+													    	</tr>
+													    	<tr><small>{{field.error}}</small></tr>
+													    {% endfor %}
+												    </table>
+											    </center>
+											    <br>	
+											    <input  type="submit" value="{% trans 'Submit' %}" />
+											</form>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-2">
+								</div>
+						</div>
+					</div>
+					<div class="tab-pane fade" id="tabs-2">
+					Facult form
+					</div>
+					
+                    
+                </div>
+
+            
+        </div>
+<!-- <div id = 'forms'>
 	<div class="col-md-2">
 	</div>
+
 	<div class="col-md-8">
-	<div class="panel panel-default text-center">
-	    		<div class="panel-heading">
-	                <h3 class="panel-title">Register</h3>
-	            </div>
-	            <div class="panel-body">
-	<form method="post" action="">
-	    {% csrf_token %}
-	    {{ form.as_p }}
-	    <input type="submit" value="{% trans 'Submit' %}" />
-	</form>
+		<div class="panel panel-default text-center">
+    		<div class="panel-heading">
+                <h3 class="panel-title">Register</h3>
+			</div>
+			<div class="panel-body">
+				<form method="post" action="">
+				    {% csrf_token %}
+				    {{ form.as_p }}
+				    <input type="submit" value="{% trans 'Submit' %}" />
+				</form>
+			</div>
+		</div>
 	</div>
-	</div>
-	</div>
+
 	<div class="col-md-2">
 	</div>
-</div>
+</div> -->
 {% endblock %}
 
 

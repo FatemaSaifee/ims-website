@@ -8,7 +8,7 @@ from .compat import RequestSite, is_app_installed, get_site_model
 
 class RegistrationAdmin(admin.ModelAdmin):
     actions = ['activate_users', 'resend_activation_email']
-    list_display = ('user', 'activation_key_expired')
+    list_display = ('user', 'activation_key_expired','verified')
     raw_id_fields = ['user']
     search_fields = ('user__{0}'.format(UsernameField()),
                      'user__first_name', 'user__last_name')
@@ -22,6 +22,16 @@ class RegistrationAdmin(admin.ModelAdmin):
         for profile in queryset:
             RegistrationProfile.objects.activate_user(profile.activation_key)
     activate_users.short_description = _("Activate users")
+
+    # def verified_users(self, request, queryset):
+    #     """
+    #     Verifies the selected users, if they are not already
+    #     activated.
+
+    #     """
+    #     for profile in queryset:
+    #         RegistrationProfile.objects.activate_user(profile.activation_key)
+    # activate_users.short_description = _("Verify users")
 
     def resend_activation_email(self, request, queryset):
         """

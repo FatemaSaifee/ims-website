@@ -35,10 +35,24 @@ import pdb
 
 User = UserModel()
 
+class UserCreateForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "password1", "password2")
+
+    def save(self, commit=True):
+        user = super(UserCreateForm, self).save(commit=False)
+        user.email = self.cleaned_data["email"]
+        if commit:
+            user.save()
+        return user
+
 class StudentForm(ModelForm):
     class Meta:
         model = Student
-        exclude = ['user','activation_key','activated']#,'Batch','Father_Name','Mother_Name','DOB','Roll_Number','Enrollment_Number']
+        exclude = ['user','activation_key','activated','verified']#,'Batch','Father_Name','Mother_Name','DOB','Roll_Number','Enrollment_Number']
         # fields = '__all__'
         # error_messages = {
         #     NON_FIELD_ERRORS: {
@@ -65,26 +79,11 @@ class RegistrationForm(MultiModelForm):
     # class Meta:
     #     model = Student
     #     fields = '__all__'#(UsernameField(), "email")#,"group")
-    # form_classes = {
-    #     'user': UserCreationForm,
-    #     'student': StudentForm,
-    # }
-
-    # def save(self, commit=True):
-    #     objects = super(RegistrationForm, self).save(commit=False)
-
-    #     if commit:
-    #         user = objects['user']
-    #         user.save()
-    #         profile = objects['student']
-    #         profile.user = user
-    #         profile.save()
-
-    #     return objects
+  
     base_forms = [
-            
+            ('user', UserCreateForm),
             ('student', StudentForm),
-            ('user', UserCreationForm),
+            
         ]
 
     def dispatch_init_instance(self, name, instance):
@@ -109,6 +108,7 @@ class RegistrationForm(MultiModelForm):
             #     instance.save()
         return instances
 
+
     # def save(self, **kwargs):
     #     users = User.objects.filter(pk__in=kwargs.get('users', None))
     #     roles = Role.objects.filter(pk__in=kwargs.get('roles', None))
@@ -124,10 +124,47 @@ class RegistrationForm(MultiModelForm):
 class FacultyForm(ModelForm):
     class Meta:
         model = Faculty
-        exclude = ['User']
+        exclude = ['user','activation_key','activated','verified']
 
 
+class FacultyRegistrationForm(MultiModelForm):
+    """
+    Form for registering a new user account.
+
+    Validates that the requested username is not already in use, and
+    requires the password to be entered twice to catch typos.
+
+    Subclasses should feel free to add any additional validation they
+    need, but should avoid defining a ``save()`` method -- the actual
+    saving of collected user data is delegated to the active
+    registration backend.
+
+    """
+    
+    base_forms = [
+            ('user', UserCreateForm),
+            ('faculty', FacultyForm), 
+        ]
+
+    def dispatch_init_instance(self, name, instance):
+        if name == 'Faculty':
+            return instance
+        return super(FacultyRegistrationForm, self).dispatch_init_instance(name, instance)
+
+    def save(self, commit=True):
+        """Save both forms and attach the user to the person."""
+        instances = super(FacultyRegistrationForm, self).save(commit=False)
+        with allow_unsaved(Student, 'user'):
+            instances['faculty'].user = instances['user']
         
+        if commit:
+            user = instances['user']
+            user.save()
+            profile = instances['faculty']
+            profile.user = user
+            profile.save()
+            
+        return instances       
 
 class RegistrationFormTermsOfService(RegistrationForm):
     """

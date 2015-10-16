@@ -90,7 +90,7 @@ function processResponse(payload) {
 	if(prCallback != null) prCallback(payload);
 }
 
-function InitChatWindow(ChatMessagesUrl, ProcessResponseCallback){
+function InitChatWindow(ChatMessagesUrl, ProcessResponseCallback, csrf = null){
 /**   The args to provide are:
 	- the URL to call for AJAX calls.
 	- A callback function that handles any data in the JSON payload other than the basic messages.
@@ -100,10 +100,12 @@ function InitChatWindow(ChatMessagesUrl, ProcessResponseCallback){
 	// Push the calling args into global variables so that they can be accessed from any function.
 	url = ChatMessagesUrl;
 	prCallback = ProcessResponseCallback;
-
+	// console.log("inside initchatwindow with ChatMessagesUrl, ProcessResponseCallback = ");
+	// window.alert(ProcessResponseCallback);
+	// console.log(ChatMessagesUrl);console.log( ProcessResponseCallback);
 	// Read new messages from the server every X milliseconds.
 	IntervalID = setInterval(callServer, CallInterval);
-
+	console.log(callServer, CallInterval)
 	// The above will trigger the first call only after X milliseconds; so we
 	// manually trigger an immediate call.
 	callServer();
@@ -118,19 +120,20 @@ function InitChatWindow(ChatMessagesUrl, ProcessResponseCallback){
 		clearInterval(IntervalID);
 		// alert(timestamp);
 		// timestamp = new Date().getTime();
-		
+		// alert(url);
 		$.post(	url,
 				{
 				time: timestamp,
 				action: "postmsg",
-				message: $("#msg").val()
+				message: $("#msg").val(),
+				csrfmiddlewaretoken : csrf,
            		},
            		function(payload) {
-           			
-
-         						$("#msg").val(""); // clean out contents of input field.
+           						$("#msg").val(""); // clean out contents of input field.
          						// Calls to the server always return the latest messages, so display them.
+         						alert("c x");
          						processResponse(payload);
+         						alert("c v c x");
        							},
        			'json'
        	)

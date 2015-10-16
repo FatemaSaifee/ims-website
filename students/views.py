@@ -8,6 +8,8 @@ from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import UpdateView
 
+import pdb
+
 # from django.core.context_processors import csrf
 # from django.template import RequestContext,loader
 # from django.views import generic
@@ -172,7 +174,7 @@ def ShelfView(request):
     context= {}
     context['program_list'] = Program.objects.all()
     context['user']=request.user
-    context['profile']=request.user.Student #Student.objects.get('User'=request__user)#request.user.Student
+    context['profile']=Student.objects.get(user = request.user)#request.user.Student #Student.objects.get('User'=request__user)#request.user.Student
     context['book_list'] = Book.objects.all()
     context['question_paper_list'] = Question_Paper.objects.all()
     context['link_list'] = Link.objects.all()
@@ -183,17 +185,27 @@ def StudentView(request):
     context= {}
     context['program_list'] = Program.objects.all()
     context['user']=request.user
-    context['profile']=request.user.Student #Student.objects.get('User'=request__user)#request.user.Student
+    # pdb.set_trace()
+
+    context['profile']=Student.objects.get(user = request.user)#request.user.Student #Student.objects.get('User'=request__user)#request.user.Student
     
-    return render_to_response('students/Student.html', context)
+    return render_to_response('students/bulletin.html', context)
 
 def ChatroomView(request):
     context= {}
     context['program_list'] = Program.objects.all()
     context['user']=request.user
-    context['profile']=request.user.Student #Student.objects.get('User'=request__user)#request.user.Student
+    context['profile']=Student.objects.get(user = request.user)#request.user.Student #Student.objects.get('User'=request__user)#request.user.Student
     
     return render_to_response('students/classroom.html', context)
+
+def ProfileView(request):
+    context= {}
+    context['program_list'] = Program.objects.all()
+    context['user']=request.user
+    context['profile']=Student.objects.get(user = request.user)#request.user.faculty #Profile.objects.get('User'=request__user)#request.user.profile
+    
+    return render_to_response('students/profile.html', context)
 
 class EditProfileView(UpdateView):
     model = Student
@@ -201,12 +213,12 @@ class EditProfileView(UpdateView):
     template_name = 'students/edit-profile.html'
 
     def get(self, request, **kwargs):
-        self.object = Student.objects.get(User = User.objects.get(id=self.kwargs['id']))
+        self.object = Student.objects.get(user_id = self.kwargs['id'])#User = User.objects.get(id=self.kwargs['id']))
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         context = self.get_context_data(object=self.object, form=form)
         return self.render_to_response(context)
 
     def get_object(self, queryset=None):
-        obj = Student.objects.get(User = User.objects.get(id=self.kwargs['id']))
+        obj = Student.objects.get(user_id = self.kwargs['id'])#User = User.objects.get(id=self.kwargs['id']))
         return obj
