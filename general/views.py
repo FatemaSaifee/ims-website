@@ -56,8 +56,8 @@ class AccountProgramDetailView(SingleObjectMixin, ListView):
                 ctx['accountbase'] = 'students/base.html'
             if group == 'faculty':
                 ctx['accountbase'] = 'faculty/base.html'
-
         return ctx
+
     def get_queryset(self):
         return self.object.course_set.all()
 

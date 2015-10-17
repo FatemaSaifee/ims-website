@@ -8,9 +8,11 @@ from django.utils.html import escape
 from models import Room, Message
 
 from general.models import Student, Faculty
-# from django.core.context_processors import csrf
-from django.template.context_processors import csrf
+
+from django.core.context_processors import csrf
+
 import time
+
 import pdb
 # The format of the date displayed in the chat window can be customised.
 try:
@@ -31,8 +33,9 @@ def window(request, id):
     """A basic chat client window."""
 
     ThisRoom = get_object_or_404(Room, id=id)
+
     context = {}
-    #context['context_instance'] = RequestContext(request)
+    
     if request.user is not None:
         try:
             Student.objects.get(user=request.user)
@@ -44,16 +47,15 @@ def window(request, id):
             is_faculty = True
         except Faculty.DoesNotExist:
             is_faculty = False
-        # pdb.set_trace()
+       
         if is_student == True:
             context['accountbase'] = 'students/corner-base.html'
         elif is_faculty == True:
             context['accountbase'] = 'faculty/corner-base.html'
     context['room'] = ThisRoom
     context.update(csrf(request))
-    return render_to_response('jqchat/chat_room.html', context)#{'room': ThisRoom}))
-    # return render_to_response('jqchat/chat_test.html', {'room': ThisRoom},
-                              # context_instance=RequestContext(request))
+
+    return render_to_response('jqchat/chat_test.html', context)
 
 #------------------------------------------------------------------------------
 @login_required
@@ -63,8 +65,7 @@ def WindowWithDescription(request, id):
 
     ThisRoom = get_object_or_404(Room, id=id)
 
-    return render_to_response('jqchat/chat_test_with_desc.html', {'room': ThisRoom})#,
-                              # context_instance=RequestContext(request))
+    return render_to_response('jqchat/chat_test_with_desc.html', {'room': ThisRoom})
 
 #------------------------------------------------------------------------------
 class Ajax(object):
@@ -101,32 +102,30 @@ class Ajax(object):
     # Note that login_required decorators cannot be attached here if the __call__ is to be overridden.
     # Instead they have to be attached to child classes.
     def __call__(self, request, id):
-        
+
         if not request.user.is_authenticated():
             return HttpResponseBadRequest('You need to be logged in to access the chat system.')
 
         StatusCode = 0 # Default status code is 0 i.e. no new data.
         self.request = request
-        # pdb.set_trace()
         try:
             self.request_time = float(self.request.REQUEST['time'])
         except (ValueError, TypeError, KeyError):
             return HttpResponseBadRequest("What's the time?")
         self.ThisRoom = Room.objects.get(id=id)
         NewDescription = None
-        # pdb.set_trace()
-        # b = 0/0
-        # self.request.method = "POST"
+        
+        pdb.set_trace()
         if self.request.method == "POST":
             # User has sent new data.
-           
-            pdb.set_trace()
+
             action = self.request.POST['action']
 
             if action == 'postmsg':
                 msg_text = self.request.POST['message']
 
                 if len(msg_text.strip()) > 0: # Ignore empty strings.
+                    pdb.set_trace()
                     Message.objects.create_message(self.request.user, self.ThisRoom, escape(msg_text))
         else:
             # If a GET, make sure that no action was specified.
@@ -147,7 +146,7 @@ class Ajax(object):
         # Get new messages - do this last in case the ExtraHandling has itself generated
         # new messages.
         NewMessages = self.ThisRoom.message_set.filter(unix_timestamp__gt=self.request_time)
-        # pdb.set_trace()
+
         if JQCHAT_DISPLAY_TIME:
             min_unix_timestamp = time.time() - JQCHAT_DISPLAY_TIME*3600
             NewMessages = NewMessages.filter(unix_timestamp__gt=min_unix_timestamp)
@@ -168,8 +167,8 @@ class Ajax(object):
                                    'user_tz': user_tz,
                                    'CustomPayload': CustomPayload,
                                    'TimeDisplayFormat': DATE_FORMAT
-                                   })
-                                  # context=RequestContext(self.request))
+                                   },
+                                  context_instance=RequestContext(self.request))
         response['Content-Type'] = 'text/plain; charset=utf-8'
         response['Cache-Control'] = 'no-cache'
         return response
@@ -184,11 +183,8 @@ class Ajax(object):
         """
         return None
 
-BasicAjaxHandler = Ajax()
 
-# def BasicAjaxHandler(request, id):
-#     a = Ajax()
-#     a(request, id)
+BasicAjaxHandler = Ajax()
 
 
 #------------------------------------------------------------------------------
@@ -215,30 +211,3 @@ class DescriptionAjax(Ajax):
 
 WindowWithDescriptionAjaxHandler = DescriptionAjax()
 
-@login_required
-def chat_rooms(request):
-    context = {}
-    if request.user is not None:
-        try:
-            Student.objects.get(user=request.user)
-            is_student = True
-        except Student.DoesNotExist:
-            is_student = False
-        try:
-            Faculty.objects.get(user=request.user)
-            is_faculty = True
-        except Faculty.DoesNotExist:
-            is_faculty = False
-        # pdb.set_trace()
-        if is_student == True:
-            context['accountbase'] = 'students/corner-base.html'
-        elif is_faculty == True:
-            context['accountbase'] = 'faculty/corner-base.html'
-
-    # for group in request.user.groups.values_list('name',flat=True):
-    #     if group == 'student':
-    #         context['accountbase'] = 'students/corner-base.html'
-    #     if group == 'faculty':
-    #         context['accountbase'] = 'faculty/corner-base.html'
-    context['chat_rooms'] = Room.objects.all()
-    return render_to_response('jqchat/chat_rooms.html', context)

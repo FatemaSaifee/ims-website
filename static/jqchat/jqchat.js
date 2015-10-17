@@ -90,22 +90,21 @@ function processResponse(payload) {
 	if(prCallback != null) prCallback(payload);
 }
 
-function InitChatWindow(ChatMessagesUrl, ProcessResponseCallback, csrf = null){
+function InitChatWindow(ChatMessagesUrl, ProcessResponseCallback){
 /**   The args to provide are:
 	- the URL to call for AJAX calls.
 	- A callback function that handles any data in the JSON payload other than the basic messages.
 	  For example, it is used in the example below to handle changes to the room's description. */
+
 	$("#loading").remove(); // Remove the dummy 'loading' message.
 
 	// Push the calling args into global variables so that they can be accessed from any function.
 	url = ChatMessagesUrl;
 	prCallback = ProcessResponseCallback;
-	// console.log("inside initchatwindow with ChatMessagesUrl, ProcessResponseCallback = ");
-	// window.alert(ProcessResponseCallback);
-	// console.log(ChatMessagesUrl);console.log( ProcessResponseCallback);
+
 	// Read new messages from the server every X milliseconds.
 	IntervalID = setInterval(callServer, CallInterval);
-	console.log(callServer, CallInterval)
+
 	// The above will trigger the first call only after X milliseconds; so we
 	// manually trigger an immediate call.
 	callServer();
@@ -118,32 +117,26 @@ function InitChatWindow(ChatMessagesUrl, ProcessResponseCallback, csrf = null){
 		// We don't want to post a call at the same time as the regular message update call,
 		// so cancel that first.
 		clearInterval(IntervalID);
-		// alert(timestamp);
-		// timestamp = new Date().getTime();
-		// alert(url);
-		$.post(	url,
+
+		$.post(url,
 				{
 				time: timestamp,
 				action: "postmsg",
-				message: $("#msg").val(),
-				csrfmiddlewaretoken : csrf,
+				message: $("#msg").val()
            		},
            		function(payload) {
-           						$("#msg").val(""); // clean out contents of input field.
+         						$("#msg").val(""); // clean out contents of input field.
          						// Calls to the server always return the latest messages, so display them.
-         						alert("c x");
          						processResponse(payload);
-         						alert("c v c x");
        							},
        			'json'
-       	)
-       	});
-       	
+       	);
+
        	// Start calling the server again at regular intervals.
        	IntervalID = setInterval(callServer, CallInterval);
 
 		return false;
-
+	});
 
 
 } // End InitChatWindow
@@ -166,7 +159,6 @@ function InitChatDescription(){
 		// We don't want to post a call at the same time as the regular message update call,
 		// so cancel that first.
 		clearInterval(IntervalID);
-
 		$.post(url,
 				{
 				time: timestamp,

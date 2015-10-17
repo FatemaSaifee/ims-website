@@ -6,7 +6,6 @@ import views
 
 urlpatterns = patterns('',
     # Example chat room.
-    url(r"rooms/$", views.chat_rooms, name="jqchat_chat_rooms"),
     url(r"room/(?P<id>\d+)/$", views.window, name="jqchat_test_window"),
     url(r"room/(?P<id>\d+)/ajax/$", views.BasicAjaxHandler, name="jqchat_ajax"),
     # Second example room - adds room descriptions.
