@@ -23,10 +23,24 @@ class Account_HomeView(ListView):
         ctx['course_list'] = Course.objects.all()
         ctx['news_list'] = News.objects.order_by('-pub_date')[:5]
         ctx['notification_list']= Notification.objects.order_by('-pub_date')[:5]
-        for group in self.request.user.groups.values_list('name',flat=True):
-            if group == 'student':
+        
+        user = self.request.user
+
+        if user is not None:
+            try:
+                Student.objects.get(user=user)
+                is_student = True
+            except Student.DoesNotExist:
+                is_student = False
+            try:
+                Faculty.objects.get(user=user)
+                is_faculty = True
+            except Faculty.DoesNotExist:
+                is_faculty = False
+
+            if is_student:
                 ctx['accountbase'] = 'students/base.html'
-            if group == 'faculty':
+            if is_faculty:
                 ctx['accountbase'] = 'faculty/base.html'
         return ctx
 
@@ -51,10 +65,24 @@ class AccountProgramDetailView(SingleObjectMixin, ListView):
         ctx = super(AccountProgramDetailView, self).get_context_data(**kwargs)
         ctx['program_list'] = Program.objects.all()
         ctx['course_list'] = Course.objects.all()
-        for group in self.request.user.groups.values_list('name',flat=True):
-            if group == 'student':
+        
+        user = self.request.user
+
+        if user is not None:
+            try:
+                Student.objects.get(user=user)
+                is_student = True
+            except Student.DoesNotExist:
+                is_student = False
+            try:
+                Faculty.objects.get(user=user)
+                is_faculty = True
+            except Faculty.DoesNotExist:
+                is_faculty = False
+
+            if is_student:
                 ctx['accountbase'] = 'students/base.html'
-            if group == 'faculty':
+            if is_faculty:
                 ctx['accountbase'] = 'faculty/base.html'
         return ctx
 
@@ -70,10 +98,24 @@ class AccountNewsView(ListView):
         ctx = super(AccountNewsView, self).get_context_data(**kwargs)
         ctx['program_list'] = Program.objects.all()
         ctx['course_list'] = Course.objects.all()
-        for group in self.request.user.groups.values_list('name',flat=True):
-            if group == 'student':
+        
+        user = self.request.user
+
+        if user is not None:
+            try:
+                Student.objects.get(user=user)
+                is_student = True
+            except Student.DoesNotExist:
+                is_student = False
+            try:
+                Faculty.objects.get(user=user)
+                is_faculty = True
+            except Faculty.DoesNotExist:
+                is_faculty = False
+
+            if is_student:
                 ctx['accountbase'] = 'students/base.html'
-            if group == 'faculty':
+            if is_faculty:
                 ctx['accountbase'] = 'faculty/base.html'
 
         return ctx
@@ -90,10 +132,24 @@ class AccountNotificationView(ListView):
         ctx = super(AccountNotificationView, self).get_context_data(**kwargs)
         ctx['program_list'] = Program.objects.all()
         ctx['course_list'] = Course.objects.all()
-        for group in self.request.user.groups.values_list('name',flat=True):
-            if group == 'student':
+        
+        user = self.request.user
+
+        if user is not None:
+            try:
+                Student.objects.get(user=user)
+                is_student = True
+            except Student.DoesNotExist:
+                is_student = False
+            try:
+                Faculty.objects.get(user=user)
+                is_faculty = True
+            except Faculty.DoesNotExist:
+                is_faculty = False
+
+            if is_student:
                 ctx['accountbase'] = 'students/base.html'
-            if group == 'faculty':
+            if is_faculty:
                 ctx['accountbase'] = 'faculty/base.html'
 
         return ctx
@@ -107,10 +163,24 @@ class AccountContactView(ListView):
         ctx = super(AccountContactView, self).get_context_data(**kwargs)
         ctx['program_list'] = Program.objects.all()
         ctx['course_list'] = Course.objects.all()
-        for group in self.request.user.groups.values_list('name',flat=True):
-            if group == 'student':
+        
+        user = self.request.user
+
+        if user is not None:
+            try:
+                Student.objects.get(user=user)
+                is_student = True
+            except Student.DoesNotExist:
+                is_student = False
+            try:
+                Faculty.objects.get(user=user)
+                is_faculty = True
+            except Faculty.DoesNotExist:
+                is_faculty = False
+
+            if is_student:
                 ctx['accountbase'] = 'students/base.html'
-            if group == 'faculty':
+            if is_faculty:
                 ctx['accountbase'] = 'faculty/base.html'
 
         return ctx 
@@ -127,10 +197,24 @@ class AccountFacultyInfoView(ListView):
         ctx = super(AccountFacultyInfoView, self).get_context_data(**kwargs)
         ctx['program_list'] = Program.objects.all()
         ctx['course_list'] = Course.objects.all()
-        for group in self.request.user.groups.values_list('name',flat=True):
-            if group == 'student':
+        
+        user = self.request.user
+
+        if user is not None:
+            try:
+                Student.objects.get(user=user)
+                is_student = True
+            except Student.DoesNotExist:
+                is_student = False
+            try:
+                Faculty.objects.get(user=user)
+                is_faculty = True
+            except Faculty.DoesNotExist:
+                is_faculty = False
+
+            if is_student:
                 ctx['accountbase'] = 'students/base.html'
-            if group == 'faculty':
+            if is_faculty:
                 ctx['accountbase'] = 'faculty/base.html'
 
         return ctx  
@@ -261,32 +345,53 @@ def accountLoginView(request):
     context.update(csrf(request))
     return render_to_response('general/account_login.html', context)
 
+
 def accountAuthView(request):
-    username = request.POST.get('username','')
-    #group = request.POST.get('group','')
-    password = request.POST.get('password','')
-    user = auth.authenticate(username=username,password=password)
-    context= {}
-    context.update(csrf(request))
-    # pdb.set_trace()
-    if user is not None:
+    
+    if request.user is not None:
         try:
-            Student.objects.get(user=request.user)
+            Student.objects.get(user=request.user.id)
             is_student = True
         except Student.DoesNotExist:
             is_student = False
         try:
-            Faculty.objects.get(user=request.user)
+            Faculty.objects.get(user=request.user.id)
             is_faculty = True
         except Faculty.DoesNotExist:
             is_faculty = False
         # pdb.set_trace()
         if is_student == True:
-            auth.login(request, user)
+            
             return HttpResponseRedirect('/students')
         elif is_faculty == True:
-            auth.login(request, user)
+            
             return HttpResponseRedirect('/faculty')
+# def accountAuthView(request):
+#     username = request.POST.get('username','')
+#     #group = request.POST.get('group','')
+#     password = request.POST.get('password','')
+#     user = auth.authenticate(username=username,password=password)
+#     context= {}
+#     context.update(csrf(request))
+#     # pdb.set_trace()
+#     if user is not None:
+#         try:
+#             Student.objects.get(user_id=request.user.id)
+#             is_student = True
+#         except Student.DoesNotExist:
+#             is_student = False
+#         try:
+#             Faculty.objects.get(user_id=request.user.id)
+#             is_faculty = True
+#         except Faculty.DoesNotExist:
+#             is_faculty = False
+#         # pdb.set_trace()
+#         if is_student == True:
+#             auth.login(request, user)
+#             return HttpResponseRedirect('/students')
+#         elif is_faculty == True:
+#             auth.login(request, user)
+#             return HttpResponseRedirect('/faculty')
         # for group in user.groups.values_list('name',flat=True):
         #     # if group == 'staff':
         #     #     auth.login(request, user)

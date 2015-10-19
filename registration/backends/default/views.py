@@ -113,6 +113,7 @@ class RegistrationView(BaseRegistrationView):
             new_user_instance = form.save()['user']
             # pdb.set_trace()
         else:
+            pdb.set_trace()
             new_user_instance = (UserModel().objects.create_user(**form.cleaned_data))
             
         # new_user = RegistrationProfile.objects.create_inactive_user(

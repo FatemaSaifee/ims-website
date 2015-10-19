@@ -37,7 +37,7 @@ urlpatterns = [
     url(r'^accounts/', include('registration.backends.default.urls')),
     url(r'^', include('general.urls',namespace = "general")),
     # url(r'^tribune/', include('djangotribune.urls')),
-    url(r'^chat/', include('jqchat.urls')),
+    url(r'^chat/', include('jqchat.urls', namespace = "chat")),
 
 
 

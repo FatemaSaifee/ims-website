@@ -1,0 +1,53 @@
+{% extends accountbase %}
+{% load staticfiles %}
+{% block breadcrumb %}
+<li><a href="{% url 'general:home' %}">Home</a></li>
+<li><a href="{% url 'students:bulletin' %}">Student</a></li>
+<li><a href="{% url 'chat:jqchat_chat_rooms' %}">Chatroom</a></li>
+<li class="active"> {{ room }}</li>
+{% endblock %}
+
+{% block content1 %}
+<script type="text/javascript" src="{% static 'general/mb/js/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'jqchat/jqchat.js' %}"></script>
+
+
+<h2>Room name: {{ room }}</h2>
+
+
+<div id="chatwindow"><span id="loading">Loading...</span></div>
+<div id="memberswindow"></div>
+<div class="clear"></div>
+<form id="chatform">
+	<label for="msg">Message:</label>
+	<input type="text" id="msg" />
+	<input type="submit" value="Send message" /><br />
+</form>
+
+<script type="text/javascript">document.getElementById("msg").focus();</script>
+
+
+<script type="text/javascript" src="{% static 'jqchat/jqchat.js' %}"></script>
+<style type="text/css">
+	/* Example styling for the chat window */
+   #chatwindow {
+     height: 250px;
+     width: 400px;
+     border: 1px solid;
+     padding: 5px;
+     margin: 10px 0;
+     overflow: auto;
+     background-color: white;
+   }
+</style>
+
+<script>
+		
+	$(document).ready(function(){
+		
+		InitChatWindow("{% url 'chat:jqchat_ajax' room.id %}", null);
+
+	});
+</script>
+
+{% endblock %}

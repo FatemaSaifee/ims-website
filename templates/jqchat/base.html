@@ -2,7 +2,9 @@
 {% load staticfiles %}
 {% block head_title %}Chat Client{% endblock %}
 
-{% block extra_head %}
+{% block content1 %}
+{% block extra_head %}{% endblock %}
+{% block content_jq %}{% endblock %}
 <!-- Load the JS for the chat window and start retrieving messages. -->
 <script type="text/javascript" src="{% static 'jqchat/jqchat.js' %}"></script>
 <style type="text/css">
@@ -17,5 +19,6 @@
      background-color: white;
    }
 </style>
+
 {% endblock %}
 

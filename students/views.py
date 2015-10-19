@@ -187,7 +187,7 @@ def StudentView(request):
     context['user']=request.user
     # pdb.set_trace()
 
-    context['profile']=Student.objects.get(user = request.user)#request.user.Student #Student.objects.get('User'=request__user)#request.user.Student
+    context['profile']=Student.objects.get(user= request.user.id)#request.user.Student #Student.objects.get('User'=request__user)#request.user.Student
     
     return render_to_response('students/bulletin.html', context)
 

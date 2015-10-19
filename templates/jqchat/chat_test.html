@@ -1,17 +1,22 @@
-{% extends accountbase %}
+{% extends "jqchat/base.html" %}
 
-{% load staticfiles %}
-{% block content1 %}
-<script type="text/javascript" src="{% static 'general/mb/js/jquery.min.js'%}"></script>
-<script type="text/javascript" src="{% static 'jqchat/jqchat.js' %}"></script>
-
+{# An example chat window #}
+{% block breadcrumb %}
+<li><a href="{% url 'general:home' %}">Home</a></li>
+<li><a href="{% url 'students:bulletin' %}">Student</a></li>
+<li><a href="{% url 'chat:jqchat_chat_rooms' %}">Chatroom</a></li>
+<li class="active"> {{ room }}</li>
+{% endblock %}
+{% block extra_head %}
+{{ block.super }}
 <script type="text/javascript">
 	$(document).ready(function(){
-		InitChatWindow("{% url 'jqchat_ajax' room.id %}", null);
+		InitChatWindow("{% url 'chat:jqchat_ajax' room.id %}", 'jqchat/chat_payload.json');
 	});
 </script>
+{% endblock %}
 
-
+{% block content_jq %}
 
 <div id="chat_left_col">
 	<h1>Test Chat Client</h1>
@@ -19,30 +24,30 @@
 	<p>This is a demo of the <a href="http://code.google.com/p/django-jqchat/">
 	django-jqchat chat client</a>.</p>
 	<p>This page shows the basic client. For an example of how to extend it,
-	<a href="{% url 'jqchat_test_window_with_description' room.id %}">see here</a>.</p>
+	<a href="{% url 'chat:jqchat_test_window_with_description' room.id %}">see here</a>.</p>
 	<p>There are 2 rooms in this demo,
-	<a href="{% url 'jqchat_test_window' 1 %}">here</a> and 
-	<a href="{% url 'jqchat_test_window' 2 %}">here</a>.</p>
+	<a href="{% url 'chat:jqchat_test_window' 1 %}">here</a> and 
+	<a href="{% url 'chat:jqchat_test_window' 2 %}">here</a>.</p>
+	
 </div>
 
 <h2>Room name: {{ room }}</h2>
 
-{% include 'jqchat/_chat_form.html' %}
 
-<style type="text/css">
-	/* Example styling for the chat window */
-   #chatwindow {
-     height: 250px;
-     width: 400px;
-     border: 1px solid;
-     padding: 5px;
-     margin: 10px 0;
-     overflow: auto;
-     background-color: white;
-   }
-</style>
+<div id="chatwindow"><span id="loading">Loading...</span></div>
+<div id="memberswindow"></div>
+<div class="clear"></div>
+<form id="chatform">
+	<label for="msg">Message:</label>
+	<input type="text" id="msg" />
+	<input type="submit" value="Send message" /><br />
+</form>
 
 <script type="text/javascript">document.getElementById("msg").focus();</script>
 
-
 {% endblock %}
+
+<h2>Room name: {{ room }}</h2>
+
+
+{% include 'jqchat/_chat_form.html' %}

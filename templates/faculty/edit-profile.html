@@ -1,12 +1,12 @@
 {% extends 'faculty/corner-base.html' %}
 {% load staticfiles %}
 {% block content1 %}
-<h1>Profile</h1>
+<h1>Edit your profile</h1>
 <hr>
 <div class="row">
     <div class="col-md-4">
         <a href="portfolio-item.html">
-            <img class="img-responsive img-hover" src="{{user.profile.Picture}}" alt="">
+            <img class="img-responsive img-hover" src="{{user.registrationprofile.faculty.Picture}}" alt="">
         </a>
     </div>
     <div class="col-md-8">
@@ -27,12 +27,12 @@
 {% endblock %}
 
 <!-- Block Content -->
-<h1>Profile</h1>
+<h1>Edit your profile</h1>
 <hr>
 <div class="row">
             <div class="col-md-4">
                 <a href="portfolio-item.html">
-                    <img class="img-responsive img-hover" src="{{user.profile.Picture}}" alt="">
+                    <img class="img-responsive img-hover" src="{{user.registrationprofile.faculty.Picture}}" alt="">
                 </a>
             </div>
             <div class="col-md-8">
@@ -45,27 +45,27 @@
                 	{% endfor%}
                 	<tr>
                 		<th>Father's Name</th>
-                		<td>{{ user.profile.Father_Name }}</td>
+                		<td>{{ user.registrationprofile.faculty.Father_Name }}</td>
                 	</tr>
                 	<tr>
                 		<th>Mother's Name</th>
-                		<td>{{ user.profile.Mother_Name }}</td>
+                		<td>{{ user.registrationprofile.faculty.Mother_Name }}</td>
                 	</tr>
                 	<tr>
                 		<th>DOB</th>
-                		<td>{{ user.profile.DOB }}</td>
+                		<td>{{ user.registrationprofile.faculty.DOB }}</td>
                 	</tr>
                 	<tr>
                 		<th>Parmanent Address</th>
-                		<td>{{ user.profile.Permanent_Address }}</td>
+                		<td>{{ user.registrationprofile.faculty.Permanent_Address }}</td>
                 	</tr>
                 	<tr>
                 		<th>Roll Number</th>
-                		<td>{{ user.profile.Roll_Number }}</td>
+                		<td>{{ user.registrationprofile.faculty.Roll_Number }}</td>
                 	</tr>
                 	<tr>
                 		<th>Enrollment Number</th>
-                		<td>{{ user.profile.Enrollment_Number }}</td>
+                		<td>{{ user.registrationprofile.faculty.Enrollment_Number }}</td>
                 	</tr>
                 </table>
             </div>
