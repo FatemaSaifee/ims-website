@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from general.models import *
-from students.models import *
+from students.models import Book, Slot, Batch, Time_Slot, Time_Table, Question_Paper, Link
 from registration.forms import StudentForm
 from django.contrib.auth.models import User
 from django.views.generic.list import ListView
@@ -25,7 +25,7 @@ class HomeView(ListView):
         ctx['program_list'] = Program.objects.all()
         ctx['course_list'] = Course.objects.all()
         ctx['news_list'] = News.objects.order_by('-pub_date')[:5]
-        ctx['notification_list']= Notification.objects.order_by('-pub_date')[:5]
+        ctx['notification_list']= Notification.objects.order_by('-pub_date')
 
         
         return ctx
@@ -143,7 +143,7 @@ def StudentView(request):
     context= {}
     context['program_list'] = Program.objects.all()
     context['time_slot_list'] = Time_Slot.objects.all()
-    context['notification_list'] = Notification.objects.all().order_by('-pub_date')[:5]
+    context['notification_list'] = Notification.objects.all().order_by('-pub_date')
     context['user']=request.user
     # time table lists
     

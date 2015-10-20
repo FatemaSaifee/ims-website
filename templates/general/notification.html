@@ -1,7 +1,17 @@
 {% extends 'general/base.html' %}
 {% load staticfiles %}
 {% block content %}
+ 
+ <link rel="stylesheet" type="text/css" media="all" href="{% static 'general/mb/css/daterangepicker.css' %} " />
 
+      <link rel="stylesheet" type="text/css" media="all" href="{% static 'general/mb/css/daterangepicker.css' %} " />
+      <script language="JavaScript" type="text/javascript" src="{% static 'general/mb/js/jquery.min.js' %}"></script>
+    
+   
+      <script src="{% static 'general/mb/js/bootstrap.min.js' %} "></script>
+      <script type="text/javascript" src="{% static 'general/mb/js/moment.js' %}"></script>
+      <script type="text/javascript" src="{% static 'general/mb/js/daterangepicker.js' %}"></script>
+   
 <div class="row">
             <div class="col-lg-12">
                 <h1 class="page-header">Notifications
@@ -15,11 +25,89 @@
             </div>
         </div>
 <hr>
-<ul>
-	{% for notification in notification_list %}
-	<li class = 'glyphicon glyphicon-pushpin'>
-		<a href="{{ notification.Link }}" target="_blank">{{ notification.Title }} </a> {{ notification.pub_date }}
-	</li><br>
-	{% endfor %}
-</ul>
+
+
+
+
+<div class="col-md-8">
+
+
+    
+    </ul>
+    </div>
+    <div class="col-md-4">
+
+                <!-- Blog Search Well -->
+                <div class="well">
+                    <h4>Blog Search</h4>
+                    <div class="input-group">
+                        <form action="" method="get">
+                        
+                      
+                        <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                            <span></span> <b class="caret"></b>
+                        </div>
+                        </form>
+                    </div>
+
+                </div>
+
+
+                <ul>
+                    {% for obj in filter %}
+                            <li>{{ obj.Title }} - ${{ obj.pub_date }}<br /></li>
+                    {% endfor %}
+                </ul>
+
+</div>
+
+
+                <script type="text/javascript">
+                $(function() {
+
+                    function cb(start, end) {
+                        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                    }
+                    cb(moment().subtract(29, 'days'), moment());
+
+                    $('#reportrange').daterangepicker({
+                        ranges: {
+                           'Today': [moment(), moment()],
+                           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                           'This Month': [moment().startOf('month'), moment().endOf('month')],
+                           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                        }
+                    }, cb);
+
+                });
+                </script>
+
+  
 {% endblock %}
+
+
+
+
+
+
+
+{% for field in filter.form %}
+
+{{ field }}
+<button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+<br>
+{% endfor %}
+
+{% regroup object_list by pub_date|date:"Y-m-d" as objects_by_day %}
+<ul>
+    {% for day in objects_by_day %}
+        <li>{{day.list.0.pub_date|date:"M d"}}</li>
+        <ul>
+        {% for obj in day.list %}
+            <li>{{obj}}</li>
+        {% endfor %}
+        </ul>
+    {% endfor %}

@@ -23,7 +23,7 @@ class StudentAdmin(admin.ModelAdmin):
 admin.site.register(Student, StudentAdmin)
 admin.site.register(Batch,BatchAdmin)
 admin.site.register(Slot, SlotAdmin)
-admin.site.register(Notification)
+# admin.site.register(Notification)
 admin.site.register(Question_Paper)
 admin.site.register(Link)
 admin.site.register(Book)

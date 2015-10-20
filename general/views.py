@@ -13,6 +13,8 @@ from django.core.context_processors import csrf
 from django.shortcuts import render_to_response
 import pdb
 
+import django_filters
+
 class Account_HomeView(ListView):
     model = Program
     template_name = 'general/account-index.html'
@@ -300,9 +302,18 @@ class NewsView(ListView):
 
     
 
-class NotificationView(ListView):
-    model = Notification
-    template_name = 'general/notification.html'
+# class NotificationView(ListView):
+#     model = Notification
+#     template_name = 'general/notification.html'
+
+class NotificationFilter(django_filters.FilterSet):
+    pub_date = django_filters.DateFilter(lookup_type='lt')
+    
+    class Meta:
+        model = Notification
+        fields =  fields = {'pub_date': ['lt', 'gt'],
+                         }
+        order_by = ['pub_date']
 
     
     def get_context_data(self, **kwargs):
@@ -311,6 +322,12 @@ class NotificationView(ListView):
         ctx['course_list'] = Course.objects.all()
 
         return ctx
+
+def NotificationView(request):
+    f = NotificationFilter(request.GET, queryset=Notification.objects.order_by('pub_date'))#.all())
+    return render_to_response('general/notification.html', {'filter': f})
+
+# If you want to access the filtered objects in your views, for example if you want to paginate them, you can do that. They are in f.qs
 
 class ContactView(ListView):
     model = Contact
@@ -366,54 +383,9 @@ def accountAuthView(request):
         elif is_faculty == True:
             
             return HttpResponseRedirect('/faculty')
-# def accountAuthView(request):
-#     username = request.POST.get('username','')
-#     #group = request.POST.get('group','')
-#     password = request.POST.get('password','')
-#     user = auth.authenticate(username=username,password=password)
-#     context= {}
-#     context.update(csrf(request))
-#     # pdb.set_trace()
-#     if user is not None:
-#         try:
-#             Student.objects.get(user_id=request.user.id)
-#             is_student = True
-#         except Student.DoesNotExist:
-#             is_student = False
-#         try:
-#             Faculty.objects.get(user_id=request.user.id)
-#             is_faculty = True
-#         except Faculty.DoesNotExist:
-#             is_faculty = False
-#         # pdb.set_trace()
-#         if is_student == True:
-#             auth.login(request, user)
-#             return HttpResponseRedirect('/students')
-#         elif is_faculty == True:
-#             auth.login(request, user)
-#             return HttpResponseRedirect('/faculty')
-        # for group in user.groups.values_list('name',flat=True):
-        #     # if group == 'staff':
-        #     #     auth.login(request, user)
-        #     #     return HttpResponseRedirect('/staff')
-        #     if group == 'student':
-        #         auth.login(request, user)
-        #         return HttpResponseRedirect('/students')
-        #     elif group == 'faculty':
-        #         auth.login(request, user)
-        #         return HttpResponseRedirect('/faculty')
+
     return HttpResponseRedirect('/accounts/invalid/')
-    #         else :
-    #             return HttpResponseRedirect('/accounts/invalid')
-    #     return HttpResponseRedirect('/accounts/invalid')
-    # else :
-    #     return HttpResponseRedirect('/accounts/invalid')
-    ###################################################
-    # if user.groups.filter(name=group).exists():
-    #     auth.login(request, user)
-    #     return HttpResponseRedirect('/account')
-    # else:
-    #     return HttpResponseRedirect('/account/invalid')
+   
 def myView(request):
     form = myForm(request.POST or None, request.FILES or None)
     if request.method == 'POST':

@@ -4,17 +4,51 @@
 {% block title %}{% trans "Log in" %}{% endblock %}
 
 {% block content %}
-<form method="post" action="">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="{% trans 'Log in' %}" />
-    <input type="hidden" name="next" value="{{ next }}" />
-</form>
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Login
+            
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="{% url 'general:home' %}">Home</a>
+            </li>
+            <li class="active">Login</li>
+        </ol>
+    </div>
+</div>
 
-<p>{% trans "Forgot your password?" %} <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>.</p>
-<p>{% trans "Not a member?" %} <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>.</p>
+<div class="row">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-default text-center">
+            <div class="panel-heading">
+                <h3 class="panel-title">Login</h3>
+            </div>
+            <div class="panel-body">
+                            
+                <form method="post" action="">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="{% trans 'Log in' %}" />
+                    <input type="hidden" name="next" value="{{ next }}" />
+                </form>
+
+                <hr>
+
+                <p>{% trans "Forgot your password?" %} <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>.</p>
+                <p>{% trans "Not a member?" %} <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>.</p>
+               
+
+                
+            </div>
+            
+        </div>
+    </div>
+    <div class="col-md-4">
+    </div>
+</div>
 {% endblock %}
-
 
 {% comment %}
 **registration/login.html**

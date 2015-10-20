@@ -17,6 +17,15 @@
 
 
 </div-->   
+<link rel="stylesheet" type="text/css" media="all" href="{% static 'general/mb/css/daterangepicker.css' %} " />
+
+<link rel="stylesheet" type="text/css" media="all" href="{% static 'general/mb/css/daterangepicker.css' %} " />
+<script language="JavaScript" type="text/javascript" src="{% static 'general/mb/js/jquery.min.js' %}"></script>
+
+
+<script src="{% static 'general/mb/js/bootstrap.min.js' %} "></script>
+<script type="text/javascript" src="{% static 'general/mb/js/moment.js' %}"></script>
+<script type="text/javascript" src="{% static 'general/mb/js/daterangepicker.js' %}"></script>
 <div class="row">
 <div class="col-md-8">
 	<table class="table table-striped">
@@ -81,20 +90,51 @@
         </div>
         <div class="panel-body">
             
-            {% if notification_list %}
-            
+           
+                    <div class="input-group">
+                        <form action="" method="get">
+                        
+                      
+                        <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                            <span></span> <b class="caret"></b>
+                        </div>
+                        </form>
+                    </div>
 
-                {% for notification in notification_list %}
-                <span class='glyphicon glyphicon-pushpin' ></span>
-                <a href="{{notification.Link}}" target="_blank">{{ notification.Title }} </a></br>
-                {% endfor %}
-            
-            {% else %}
-                <p>No Notification are available.</p>
-            {% endif %}
+               
+                <ul>
+
+                    {% for obj in notification_list %}
+                            <li>{{ obj.Title }} <br /></li>
+                    {% endfor %}
+                </ul>
 
         </div>
     </div>
 </div>
 </div>
+
+<script type="text/javascript">
+$(function() {
+
+    function cb(start, end) {
+        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+    }
+    cb(moment().subtract(29, 'days'), moment());
+
+    $('#reportrange').daterangepicker({
+        ranges: {
+           'Today': [moment(), moment()],
+           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+    }, cb);
+
+});
+</script>
+
 {% endblock %}
