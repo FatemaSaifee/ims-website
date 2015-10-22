@@ -140,10 +140,14 @@ def FacultyView(request):
 @login_required
 def StudentView(request):
 
+    if request.method == "POST":
+        pdb.set_trace()
+
     context= {}
     context['program_list'] = Program.objects.all()
     context['time_slot_list'] = Time_Slot.objects.all()
-    context['notification_list'] = Notification.objects.all().order_by('-pub_date')
+    context['notification_list'] = Notification.objects.all().order_by('-pub_date')[:3]
+    context['news_list'] = News.objects.order_by('-pub_date')[:3]
     context['user']=request.user
     # time table lists
     
@@ -152,8 +156,9 @@ def StudentView(request):
     for day in days:
         context[day] = []
         day_number += 1
-        time_table = request.user.Student.Batch.time_table_set.filter(Day=day_number)
-        for time in request.user.Student.Batch.Slot.time_slot_set.all():
+        student = Student.objects.get(user = request.user)
+        time_table = student.Batch.time_table_set.filter(Day=day_number)
+        for time in student.Batch.Slot.time_slot_set.all():
             for item in time_table:
                 if item.Time_Slot == time:
                     context[day].append(item)
@@ -181,15 +186,15 @@ def ShelfView(request):
     
     return render_to_response('students/shelf.html', context)
 
-def StudentView(request):
-    context= {}
-    context['program_list'] = Program.objects.all()
-    context['user']=request.user
-    # pdb.set_trace()
+# def StudentView(request):
+#     context= {}
+#     context['program_list'] = Program.objects.all()
+#     context['user']=request.user
+#     # pdb.set_trace()
 
-    context['profile']=Student.objects.get(user= request.user.id)#request.user.Student #Student.objects.get('User'=request__user)#request.user.Student
+#     context['profile']=Student.objects.get(user= request.user.id)#request.user.Student #Student.objects.get('User'=request__user)#request.user.Student
     
-    return render_to_response('students/bulletin.html', context)
+#     return render_to_response('students/bulletin.html', context)
 
 def ChatroomView(request):
     context= {}

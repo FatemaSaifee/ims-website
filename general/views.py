@@ -288,46 +288,79 @@ class ProgramDetailView(SingleObjectMixin, ListView):
     def get_queryset(self):
         return self.object.course_set.all()
 
-class NewsView(ListView):
-    model = News
-    template_name = 'general/news.html'
-
-    def get_context_data(self, **kwargs):
-        ctx = super(NewsView, self).get_context_data(**kwargs)
-        ctx['program_list'] = Program.objects.all()
-        ctx['course_list'] = Course.objects.all()
-
-        return ctx
 
 
-    
+
 
 # class NotificationView(ListView):
 #     model = Notification
 #     template_name = 'general/notification.html'
 
-class NotificationFilter(django_filters.FilterSet):
-    pub_date = django_filters.DateFilter(lookup_type='lt')
+# class NotificationFilter(django_filters.FilterSet):
+#     pub_date = django_filters.DateFilter(lookup_type='lt')
     
-    class Meta:
-        model = Notification
-        fields =  fields = {'pub_date': ['lt', 'gt'],
-                         }
-        order_by = ['pub_date']
+#     class Meta:
+#         model = Notification
+#         fields =  fields = {'pub_date': ['lt', 'gt'],
+#                          }
+#         order_by = ['pub_date']
 
     
-    def get_context_data(self, **kwargs):
-        ctx = super(NotificationView, self).get_context_data(**kwargs)
-        ctx['program_list'] = Program.objects.all()
-        ctx['course_list'] = Course.objects.all()
+#     def get_context_data(self, **kwargs):
+#         ctx = super(NotificationView, self).get_context_data(**kwargs)
+#         ctx['program_list'] = Program.objects.all()
+#         ctx['course_list'] = Course.objects.all()
 
-        return ctx
+#         return ctx
+
+# def NotificationView(request):
+#     f = NotificationFilter(request.GET, queryset=Notification.objects.order_by('pub_date'))#.all())
+#     return render_to_response('general/notification.html', {'filter': f})
 
 def NotificationView(request):
-    f = NotificationFilter(request.GET, queryset=Notification.objects.order_by('pub_date'))#.all())
-    return render_to_response('general/notification.html', {'filter': f})
+
+    start = request.GET.get('start','')
+    end = request.GET.get('end','')
+
+    response = render_to_response('general/notification.html',
+                                {'notification_list': Notification.objects.filter(pub_date__range=[start,end])
+                                })
+                                  # context=RequestContext(self.request))
+        # response['Content-Type'] = 'text/plain; charset=utf-8'
+        # response['Cache-Control'] = 'no-cache'
+    
+    
+    # pdb.set_trace()
+    return response
 
 # If you want to access the filtered objects in your views, for example if you want to paginate them, you can do that. They are in f.qs
+def NewsView(request):
+
+    start = request.GET.get('start','')
+    end = request.GET.get('end','')
+
+    response = render_to_response('general/news.html',
+                                {'news_list': News.objects.filter(pub_date__range=[start,end])
+                                })
+                                 
+    return response
+
+def NoticeView(request):
+
+    start = request.GET.get('start','')
+    end = request.GET.get('end','')
+
+    response = render_to_response('general/notice.html',
+                                {'notification_list': Notification.objects.filter(pub_date__range=[start,end]),
+                                'news_list': News.objects.filter(pub_date__range=[start,end])
+                                })
+                                  # context=RequestContext(self.request))
+        # response['Content-Type'] = 'text/plain; charset=utf-8'
+        # response['Cache-Control'] = 'no-cache'
+    
+    
+    # pdb.set_trace()
+    return response
 
 class ContactView(ListView):
     model = Contact

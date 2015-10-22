@@ -66,17 +66,17 @@ class Time_Table(models.Model):
         return self.Subject
 
    
-class Notification(models.Model):
-    Title = models.CharField(max_length=100)
-    Link = models.URLField()
-    pub_date = models.DateTimeField('date published')
+# class Notification(models.Model):
+#     Title = models.CharField(max_length=100)
+#     Link = models.URLField()
+#     pub_date = models.DateTimeField('date published')
     
-    def __unicode__(self):  # Python 3: def __str__(self):
-        return self.Title
+#     def __unicode__(self):  # Python 3: def __str__(self):
+#         return self.Title
 
-    def was_published_recently(self):
-        now = timezone.now()
-        return now - datetime.timedelta(days=1) <= self.pub_date <= now
+#     def was_published_recently(self):
+#         now = timezone.now()
+#         return now - datetime.timedelta(days=1) <= self.pub_date <= now
 
 class Book(models.Model):
     Batch = models.ForeignKey(Batch)

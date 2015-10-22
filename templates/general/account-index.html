@@ -12,11 +12,19 @@
 {% block content %}
 <!-- it works the same with all jquery version from 1.x to 2.x -->
 
+     <link rel="stylesheet" type="text/css" media="all" href="{% static 'general/mb/css/daterangepicker.css' %} " />
+
+<!-- it works the same with all jquery version from 1.x to 2.x -->
+
     <script type="text/javascript" src="{% static 'general/mb/js/jquery-1.9.1.min.js' %}"></script>
     <!-- use jssor.slider.mini.js (40KB) instead for release -->
     <!-- jssor.slider.mini.js = (jssor.js + jssor.slider.js) -->
     <script type="text/javascript" src="{% static 'general/mb/js/jssor.js' %}"></script>
     <script type="text/javascript" src="{% static 'general/mb/js/jssor.slider.js' %}"></script>
+
+
+    <script type="text/javascript" src="{% static 'general/mb/js/moment.js' %}"></script>
+    <script type="text/javascript" src="{% static 'general/mb/js/daterangepicker.js' %}"></script>
     <script>
         jQuery(document).ready(function ($) {
 
@@ -238,43 +246,57 @@
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4><i class="glyphicon glyphicon-inbox"></i> News </h4>
+                        <h4><i class="glyphicon glyphicon-bullhorn"></i>  Notification </h4>
                     </div>
                     <div class="panel-body">
                         
-                        {% if news_list %}
-                        <ul>
-                            {% for news in news_list %}
-                            <span class = 'glyphicon glyphicon-circle-arrow-right'></span>
-                            <a href="../../media/{{news.Docfile}}" target="_blank">{{news.Title}} </a></br>
-                            {% endfor %}
-                        </ul>
-                        {% else %}
-                            <p>No News are available.</p>
-                        {% endif %}
+                       
+                                <!-- <div class="input-group">
+                                    <form action="" method="get"> -->
+                                    
+                                        <div id="newsreportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                                            <span></span> <b class="caret" align="right"></b>
+                                        </div>
+                                        <hr>
+                                        
+                           <div id = "news">
+                            
+                                {% for news in news_list %}
+                                    <span class='glyphicon glyphicon-download-alt' ></span>
+                                    <a href="{{news.Link}}" target="_blank">{{ news.Title }} </a></br>
+                                {% endfor %}
+                            
+                            </div>
 
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4><i class="glyphicon glyphicon-bullhorn"></i>  Notification </h4>
                     </div>
                     <div class="panel-body">
                         
-                        {% if notification_list %}
-                        <ul>
-
-                            {% for notification in notification_list %}
-                            <span class='glyphicon glyphicon-pushpin' ></span>
-                            <a href="{{notification.Link}}" target="_blank">{{ notification.Title }} </a></br>
-                            {% endfor %}
-                        </ul>
-                        {% else %}
-                            <p>No Notification are available.</p>
-                        {% endif %}
-
+                       
+                                <!-- <div class="input-group">
+                                    <form action="" method="get"> -->
+                                    
+                                        <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                                            <span></span> <b class="caret" align="right"></b>
+                                        </div>
+                                        <hr>
+                                        
+                           <div id = "notification">
+                            <ul>
+                                {% for notification in notification_list %}
+                                    <span class='glyphicon glyphicon-pushpin' ></span>
+                                    <a href="{{notification.Link}}" target="_blank">{{ notification.Title }} </a></br>
+                                {% endfor %}
+                            </ul>
+                            </div>
 
                     </div>
                 </div>
@@ -284,8 +306,108 @@
         <!-- /.row -->
 
         
+<script type="text/javascript">
+$(function() {
 
+    function cb(start, end) {
+        $('#reportrange span').html(start.format('MMM D, YYYY') + '-' + end.format('MMM D, YYYY'));
+    }
+    cb(moment().subtract(29, 'days'), moment());
+
+    $('#reportrange').daterangepicker({
+        ranges: {
+           'Today': [moment(), moment()],
+           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+    },function(start, end, label) {
+        $('#reportrange span').html(start.format('MMM D, YYYY') + '-' + end.format('MMM D, YYYY'));
+        // var drp = $('#reportrange').data('daterangepicker');
+        // alert(drp)
+        $.ajax({
+            url: "/notification/?start="+start.format('YYYY-MM-DD')+"&end="+end.format('YYYY-MM-DD'),
+            data: {
+                txtsearch: $('#reportrange').val()
+            },
+            type: "GET",
+            dataType : "html",
+            success: function( data ) {
+                $('#notification').replaceWith($('#notification').html(data));
+            },
+            error: function( xhr, status ) {
+            alert( "Sorry, there was a problem!" );
+            },
+            complete: function( xhr, status ) {
+                //$('#showresults').slideDown('slow')
+            }
+            });
+        
+    });
+
+
+});
+
+
+
+
+</script>
+<script type="text/javascript">
+$(function() {
+
+    function cb(start, end) {
+        $('#newsreportrange span').html(start.format('MMM D, YYYY') + '-' + end.format('MMM D, YYYY'));
+    }
+    cb(moment().subtract(29, 'days'), moment());
+
+    $('#newsreportrange').daterangepicker({
+        ranges: {
+           'Today': [moment(), moment()],
+           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+    },function(start, end, label) {
+        $('#newsreportrange span').html(start.format('MMM D, YYYY') + '-' + end.format('MMM D, YYYY'));
+        // var drp = $('#reportrange').data('daterangepicker');
+        // alert(drp)
+        $.ajax({
+            url: "/news/?start="+start.format('YYYY-MM-DD')+"&end="+end.format('YYYY-MM-DD'),
+            data: {
+                txtsearch: $('#reportrange').val()
+            },
+            type: "GET",
+            dataType : "html",
+            success: function( data ) {
+                $('#news').replaceWith($('#news').html(data));
+            },
+            error: function( xhr, status ) {
+            alert( "Sorry, there was a problem!" );
+            },
+            complete: function( xhr, status ) {
+                //$('#showresults').slideDown('slow')
+            }
+            });
+        
+    });
+
+
+});
+
+
+
+
+</script>
 
 {% endblock %}
 </body>
 </html> 
+
+
+        
+
+
