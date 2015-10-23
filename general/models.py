@@ -3,7 +3,7 @@ from django.utils import timezone
 import datetime
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
-from jqchat.models import Room
+# from jqchat.models import Room
 from django.utils.encoding import python_2_unicode_compatible
 from registration.users import UserModel, UserModelString
 from registration.models import RegistrationManager
@@ -321,7 +321,7 @@ class Contact(models.Model):
 
 
 class ChatRoom(models.Model):
-	Room = models.ForeignKey(Room, unique = True)
+	Room = models.ForeignKey('jqchat.Room', unique = True)
 	User = models.ForeignKey(User)
 
 	def __unicode__(self):  # Python 3: def __str__(self):

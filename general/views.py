@@ -15,6 +15,7 @@ import pdb
 
 import django_filters
 
+
 class Account_HomeView(ListView):
     model = Program
     template_name = 'general/account-index.html'
@@ -389,15 +390,16 @@ class FacultyInfoView(ListView):
         return ctx  
 
 # Authentication views here.
-def accountLoginView(request):
-    context= {}
-    context['program_list'] = Program.objects.all()
-    context.update(csrf(request))
-    return render_to_response('general/account_login.html', context)
+# def accountLoginView(request):
+#     context= {}
+#     context['program_list'] = Program.objects.all()
+#     context.update(csrf(request))
+#     return render_to_response('registration/login.html', context)
 
 
 def accountAuthView(request):
-    
+
+
     if request.user is not None:
         try:
             Student.objects.get(user=request.user.id)

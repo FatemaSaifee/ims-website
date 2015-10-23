@@ -111,7 +111,7 @@ DEFAULT_FROM_EMAIL = 'ims.executives@gmail.com'
 DEFAULT_TO_EMAIL = 'to email'
 LOGIN_REDIRECT_URL = '/accounts/auth/'
 
-
+# AUTHENTICATION_BACKENDS = ('registration.backends.default.backend.EmailAuthBackend',)
 
 
 

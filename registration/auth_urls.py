@@ -30,7 +30,7 @@ from django.core.urlresolvers import reverse_lazy
 
 from django.contrib.auth import views as auth_views
 # from general.views import accountLoginView
-
+# from .views import email_login_view, authenticate_login
 
 urlpatterns = patterns('',
                        url(r'^login/$',
@@ -38,6 +38,8 @@ urlpatterns = patterns('',
                            {'template_name': 'registration/login.html'},
                            name='auth_login'),
                        # url(r'^login/$', accountLoginView, name='auth_login'),
+                       # url(r'^emaillogin/$', email_login_view),
+                       # url(r'^authenticate_login/',authenticate_login),
                        url(r'^logout/$',
                            auth_views.logout,
                            {'template_name': 'registration/logout.html'},

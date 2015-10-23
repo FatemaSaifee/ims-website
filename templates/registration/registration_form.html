@@ -46,17 +46,17 @@
 							                <h3 class="panel-title"> Student Register</h3>
 										</div>
 										<div class="panel-body">
-											<form method="post" action="">
+											<form method="post" action="/accounts/authenticate_login/">
 											    {% csrf_token %}
 											    <center>
 												    <table>
 													    {% for field in form %}
 													    	<tr>
-													    		<th>{{field.label}}</th>
+													    		<th>{{field.label}}{% if field.field.required %}<span class="required">*</span>{% endif %}</th>
 													    		<td>{{field}}</td>
 
 													    	</tr>
-													    	<tr><small>{{field.error}}</small></tr>
+													    	<tr><small>{{field.errors }}</small></tr>
 													    {% endfor %}
 												    </table>
 											    </center>

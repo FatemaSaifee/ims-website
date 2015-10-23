@@ -6,6 +6,9 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.utils.safestring import mark_safe
 from django.conf import settings
 
+from general.models import Student, Faculty
+
+
 import datetime
 import time
 
@@ -90,9 +93,26 @@ class messageManager(models.Manager):
 
     def create_message(self, user, room, msg):
         """Create a message for the given user."""
-        m = Message.objects.create(user=user,
-                                   room=room,
-                                   text='<strong>%s</strong> %s<br />' % (user, msg))
+
+        try:
+            Student.objects.get(user=user)
+            is_student = True
+        except Student.DoesNotExist:
+            is_student = False
+        try:
+            Faculty.objects.get(user=user)
+            is_faculty = True
+        except Faculty.DoesNotExist:
+            is_faculty = False
+       
+        if is_faculty == True:
+            m = Message.objects.create(user=user,
+                                       room=room,
+                                       text='<strong><font color=red>%s</font></strong> %s<br />' % (user, msg))
+        else:
+            m = Message.objects.create(user=user,
+                                       room=room,
+                                       text='<strong>%s</strong> %s<br />' % (user, msg))
         return m
 
     def create_event(self, user, room, event_id):

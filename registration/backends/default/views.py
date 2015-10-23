@@ -12,6 +12,8 @@ from ...views import FacultyRegistrationView as BaseFacultyRegistrationView
 from ...compat import RequestSite, is_app_installed
 from ...users import UserModel
 
+from django.contrib.auth.models import User
+
 import pdb
 class RegistrationView(BaseRegistrationView):
     """
@@ -110,12 +112,13 @@ class RegistrationView(BaseRegistrationView):
         ###################################################################################33
         site = get_current_site(request)
         if hasattr(form, 'save'):
+            # pdb.set_trace()
             new_user_instance = form.save()['user']
             # pdb.set_trace()
         else:
             pdb.set_trace()
             new_user_instance = (UserModel().objects.create_user(**form.cleaned_data))
-            
+        
         # new_user = RegistrationProfile.objects.create_inactive_user(
         # pdb.set_trace()
         new_user = Student.objects.create_inactive_user( 

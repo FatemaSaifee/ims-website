@@ -27,14 +27,14 @@
 				<p class="error">Sorry, thats not a valid username or passwword</p>
 				{% endif %}
 
-				<form action="/accounts/auth/" method="post" >
+				<form action="/accounts/authenticate_login/" method="post" >
 
 				
 				{% csrf_token %}
 				<!--label for="group">Group</label><br>
 				<input type="text" name="group" value="" id="group"><br-->
 				<label for="username">Username</label>
-				<input type="text" name="username" value="" id="username"><br>
+				<input type="text" name="email" value="" id="email"><br>
 				<label for="password">Password</label>
 				<input type="password" name="password" value="" id="password"><br>
 				<input type="submit" value="Submit" />

@@ -13,6 +13,10 @@ from django.views.decorators.debug import sensitive_post_parameters
 from .compat import import_string
 # from .forms import RegistrationForm
 # from . import signals
+from django.core.context_processors import csrf
+from django.shortcuts import render_to_response
+from django.contrib.auth import authenticate, login #for email login
+from django.contrib.auth.models import User # reference: http://stackoverflow.com/questions/13440298/django-how-to-use-built-in-login-view-with-email-instead-of-username?rq=1
 
 import pdb 
 
@@ -207,3 +211,64 @@ class ActivationView(TemplateView):
 
     def get_success_url(self, request, user):
         raise NotImplementedError
+
+
+# get default authenticate backend
+
+
+
+# create a function to resolve email to username
+def get_user(email):
+    try:
+        return User.objects.get(email=email.lower())
+    except User.DoesNotExist:
+        return None
+
+# create a view that authenticate user with email
+def email_login_view(request):
+    # def accountLoginView(request):
+    context= {}
+    context['program_list'] = []#Program.objects.all()
+    context.update(csrf(request))
+    return render_to_response('general/account_login.html', context)
+    
+def authenticate_login(request):
+    
+    email = request.POST['email']
+    password = request.POST['password']
+    username = get_user(email)
+    user = authenticate(username=username, password=password)
+
+    if user is not None:
+        try:
+            Student.objects.get(user=request.user.id)
+            is_student = True
+        except Student.DoesNotExist:
+            is_student = False
+        try:
+            Faculty.objects.get(user=request.user.id)
+            is_faculty = True
+        except Faculty.DoesNotExist:
+            is_faculty = False
+        # pdb.set_trace()
+        if is_student == True:
+            
+            return HttpResponseRedirect('/students')
+        elif is_faculty == True:
+            
+            return HttpResponseRedirect('/faculty')
+
+    return HttpResponseRedirect('/accounts/invalid/')
+    # if user is not None:
+    #     if user.is_active:
+    #         login(request, user)
+    #         # Redirect to a success page.
+    #         return HttpResponseRedirect('/accounts/auth/')
+    #     else:
+    #         # Return a 'disabled account' error message
+    #         f =0/0
+    # else:   
+    #     # Return an 'invalid login' error message.
+    #     return HttpResponseRedirect('/accounts/invalid/')
+
+    # return render_to_response('registration/login.html')

@@ -27,33 +27,23 @@
             </div>
             <div class="panel-body">
                             
-                <form method="post" action="">
-                     {% csrf_token %}
-                    <!--{ form.as_p }} -->
-                      {{ form.non_field_errors }}
-                      {% for field in form %}
-                        <div class="field-wrapper">
-                          <div class="label-wrapper">
-                            {% if field.name == "username" %}
-                              <b>Email address</b>
-                            {% else %}
-                              {{ field.label_tag }}
-                            {% endif %}
-                            {% if field.field.required %}<span class="required">*</span>{% endif %}
-                          </div>
-                          <div class="value-wrapper">
-                            {{ field }}
-                            {{ field.errors }}
-                          </div>
-                        </div>
-                      {% endfor %}
-                      <div class="submit-wrapper">
-                        <input type="submit" value="{% trans 'Log in' %}" />
-                      </div>
-                    
-                    <input type="hidden" name="next" value="{{ next }}" />
-                </form>
+                {% if err %}
+				<p class="error">Sorry, thats not a valid email address or passwword</p>
+				{% endif %}
 
+				<form action="/accounts/auth/" method="post" >
+
+				
+				{% csrf_token %}
+				<!--label for="group">Group</label><br>
+				<input type="text" name="group" value="" id="group"><br-->
+				<label for="email"> UserEmail </label>
+				<input type="text" name="email" value="" id="email"><br>
+				<label for="password">Password</label>
+				<input type="password" name="password" value="" id="password"><br>
+				<input type="submit" value="Submit" />
+				</form>
+			
                 <hr>
 
                 <p>{% trans "Forgot your password?" %} <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>.</p>

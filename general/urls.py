@@ -28,7 +28,7 @@ urlpatterns = patterns('',
 	url(r'^accounts/notification/$', login_required(views.AccountNotificationView.as_view()), name='accountnotification'),
 	url(r'^accounts/contact/$', login_required(views.AccountContactView.as_view()), name='accountcontact'),
 	url(r'^accounts/faculty_info/$', login_required(views.AccountFacultyInfoView.as_view()), name='accountfacultyinfo'),
-
+	url(r'^/accounts/email/auth/', views.ContactView.as_view(), name='email_login'),
 )
 
 urlpatterns += staticfiles_urlpatterns()
