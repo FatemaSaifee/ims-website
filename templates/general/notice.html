@@ -1,0 +1,8 @@
+{% for notification in notification_list %}
+	<span class='glyphicon glyphicon-pushpin' ></span>
+	<a href="{{notification.Link}}" target="_blank">{{ notification.Title }} </a></br>
+{% endfor %}
+{% for news in news_list %}
+    <span class = 'glyphicon glyphicon-download-alt'></span>
+    <a href="../../media/{{news.Docfile}}" target="_blank">{{news.Title}} </a></br>
+{% endfor %}
