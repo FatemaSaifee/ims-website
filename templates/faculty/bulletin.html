@@ -16,7 +16,13 @@
         </ul>
 
 
-</div-->   
+</div--> 
+<link rel="stylesheet" type="text/css" media="all" href="{% static 'general/mb/css/daterangepicker.css' %} " />
+
+<script language="JavaScript" type="text/javascript" src="{% static 'general/mb/js/jquery.min.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'general/mb/js/moment.js' %}"></script>
+<script type="text/javascript" src="{% static 'general/mb/js/daterangepicker.js' %}"></script>  
 <div class="row">
 <div class="col-md-8">
 	<table class="table table-striped">
@@ -81,20 +87,82 @@
         </div>
         <div class="panel-body">
             
-            {% if notification_list %}
-            
+           
+                    <!-- <div class="input-group">
+                        <form action="" method="get"> -->
+                        
+							<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+							    <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+							    <span></span> <b class="caret"></b>
+							</div>
+							<hr>
 
-                {% for notification in notification_list %}
-                <span class='glyphicon glyphicon-pushpin' ></span>
-                <a href="{{notification.Link}}" target="_blank">{{ notification.Title }} </a></br>
-                {% endfor %}
-            
-            {% else %}
-                <p>No Notification are available.</p>
-            {% endif %}
+               <div id = "notification">
+                <ul>
+					{% for notification in notification_list %}
+						<span class='glyphicon glyphicon-pushpin' ></span>
+						<a href="{{notification.Link}}" target="_blank">{{ notification.Title }} </a></br>
+					{% endfor %}
+					{% for news in news_list %}
+					    <span class = 'glyphicon glyphicon-download-alt'></span>
+					    <a href="../../media/{{news.Docfile}}" target="_blank">{{news.Title}} </a></br>
+					{% endfor %}
+                </ul>
+                </div>
 
         </div>
     </div>
 </div>
 </div>
+
+<script type="text/javascript">
+$(function() {
+
+    function cb(start, end) {
+        $('#reportrange span').html(start.format('MMM D, YYYY') + '-' + end.format('MMM D, YYYY'));
+    }
+    cb(moment().subtract(29, 'days'), moment());
+
+    $('#reportrange').daterangepicker({
+        ranges: {
+           'Today': [moment(), moment()],
+           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+    },function(start, end, label) {
+    	$('#reportrange span').html(start.format('MMM D, YYYY') + '-' + end.format('MMM D, YYYY'));
+    	// var drp = $('#reportrange').data('daterangepicker');
+    	// alert(drp)
+    	$.ajax({
+            url: "/notice/?start="+start.format('YYYY-MM-DD')+"&end="+end.format('YYYY-MM-DD'),
+            data: {
+                txtsearch: $('#reportrange').val()
+            },
+            type: "GET",
+            dataType : "html",
+            success: function( data ) {
+                $('#notification').replaceWith($('#notification').html(data));
+            },
+            error: function( xhr, status ) {
+            alert( "Sorry, there was a problem!" );
+            },
+            complete: function( xhr, status ) {
+                //$('#showresults').slideDown('slow')
+            }
+            });
+    	
+	});
+
+
+});
+
+
+
+
+</script>
+
 {% endblock %}
+

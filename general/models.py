@@ -18,7 +18,13 @@ try:
     from django.utils.timezone import now as datetime_now
 except ImportError:
     datetime_now = datetime.datetime.now
-# import pdb
+
+try:
+    from django.contrib.sites.shortcuts import get_current_site
+except ImportError:
+    from django.contrib.sites.models import get_current_site
+
+import pdb
 
 # Create your models here.
 
@@ -207,32 +213,6 @@ class RegistrationProfile(models.Model):
         # pdb.set_trace()
         email_message.send()
 
-class Faculty(RegistrationProfile):
-	Name=models.CharField(max_length=50)
-	#Discipline =models.CharField(max_length=200)
-	Designation=models.CharField(max_length=200)
-	Responsibility=models.CharField(max_length=200)
-	DOJ=models.DateField() 		#Date of Joining
-	Qualification=models.CharField(max_length=200)
-	Area_Of_Interest=models.CharField(max_length=200)
-	Previous_Job=models.CharField(max_length=200)
-	Web_Link=models.CharField(max_length=40,default=None)
-	Blog_Link=models.CharField(max_length=40,default=None)
-	Alternate_Email=models.CharField(max_length=40,default=None)
-	Linkedin_Link=models.CharField(max_length=40,default=None)
-	Facebook_Link=models.CharField(max_length=40,default=None)
-	Googleplus_Link=models.CharField(max_length=40,default=None)
-	Twitter_Link=models.CharField(max_length=40,default=None)
-	Picture=models.URLField(max_length=100,default=None)
-	Resume =models.URLField(max_length=40,default=None)#Link to resume
-	def __unicode__(self):  # Python 3: def __str__(self):
-		return self.Name
-
-	def get_absolute_url(self):
-		return reverse('faculty:profile')
-
-	objects = RegistrationManager()
-
 
 
 class Student(RegistrationProfile):
@@ -254,9 +234,58 @@ class Student(RegistrationProfile):
     def get_absolute_url(self):
         return reverse('students:profile')
 
+    def save(self, *args, **kwargs):
+        #check if user is verified and send mail
+        if self.verified:
+            site = 'https://localhost:8000'#get_current_site(self.request)
+            # pdb.set_trace()
+            self.send_activation_email(site)
+    
+        super(Student, self).save(*args, **kwargs)
+
     objects = RegistrationManager()
 
 
+class Faculty(RegistrationProfile):
+    Name=models.CharField(max_length=50)
+    #Discipline =models.CharField(max_length=200)
+    Designation=models.CharField(max_length=200)
+    Responsibility=models.CharField(max_length=200)
+    DOJ=models.DateField()      #Date of Joining
+    Qualification=models.CharField(max_length=200)
+    Area_Of_Interest=models.CharField(max_length=200)
+    Previous_Job=models.CharField(max_length=200)
+    Web_Link=models.CharField(max_length=40,default=None)
+    Blog_Link=models.CharField(max_length=40,default=None)
+    Alternate_Email=models.CharField(max_length=40,default=None)
+    Linkedin_Link=models.CharField(max_length=40,default=None)
+    Facebook_Link=models.CharField(max_length=40,default=None)
+    Googleplus_Link=models.CharField(max_length=40,default=None)
+    Twitter_Link=models.CharField(max_length=40,default=None)
+    Picture=models.URLField(max_length=100,default=None)
+    Resume = models.URLField(max_length=40,default=None)
+
+    
+
+    def get_absolute_url(self):
+
+        return reverse('faculty:profile')
+
+    def __unicode__(self):
+        return self.Name
+
+    def save(self, *args, **kwargs):
+        #check if user is verified and send mail
+        if self.verified:
+            site = 'https://localhost:8000'#get_current_site(self.request)
+            # pdb.set_trace()
+            self.send_activation_email(site)
+    
+        
+        # self.my_stuff = 'something I want to save in that field'
+        super(Faculty, self).save(*args, **kwargs)
+
+    objects = RegistrationManager()
 
 class Course(models.Model):
 

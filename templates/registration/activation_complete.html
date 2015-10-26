@@ -5,10 +5,14 @@
 
 {% block content %}
 <p>
-    {% trans "Your account is now activated." %}
+    <h3>{% trans "Your account is now activated." %}</h3>
     {% if not user.is_authenticated %}
     {% trans "You can log in." %}
     {% endif %}
+
+ 
+
+	click <a href="/accounts/login/">here </a>to login.
 </p>
 {% endblock %}
 

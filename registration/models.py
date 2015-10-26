@@ -1,3 +1,4 @@
+
 from __future__ import unicode_literals
 
 import datetime
@@ -127,8 +128,9 @@ class RegistrationManager(models.Manager):
         registration_profile = self.create_profile(new_user)
         # pdb.set_trace()
         if send_email:
-            # pdb.set_trace()
-            registration_profile.send_activation_email(site, request)
+            pass
+            # pdb.set_trac  e()
+            # registration_profile.send_activation_email(site, request)
 
         return new_user
 

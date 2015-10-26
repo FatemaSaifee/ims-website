@@ -402,7 +402,7 @@ def accountAuthView(request):
 
     if request.user is not None:
         try:
-            Student.objects.get(user=request.user.id)
+            s = Student.objects.get(user=request.user.id)
             is_student = True
         except Student.DoesNotExist:
             is_student = False
@@ -412,11 +412,9 @@ def accountAuthView(request):
         except Faculty.DoesNotExist:
             is_faculty = False
         # pdb.set_trace()
-        if is_student == True:
-            
+        if is_student and request.user.registrationprofile.verified:
             return HttpResponseRedirect('/students')
-        elif is_faculty == True:
-            
+        elif is_faculty and request.user.registrationprofile.verified:
             return HttpResponseRedirect('/faculty')
 
     return HttpResponseRedirect('/accounts/invalid/')
