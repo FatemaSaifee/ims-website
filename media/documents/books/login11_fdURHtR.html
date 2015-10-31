@@ -1,0 +1,89 @@
+{% extends "registration/registration_base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Log in" %}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Login
+            
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="{% url 'general:home' %}">Home</a>
+            </li>
+            <li class="active">Login</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-default text-center">
+            <div class="panel-heading">
+                <h3 class="panel-title">Login</h3>
+            </div>
+            <div class="panel-body">
+                            
+                {% if err %}
+				<p class="error">Sorry, thats not a valid email address or passwword</p>
+				{% endif %}
+
+				<form action="/accounts/auth/" method="post" >
+
+				
+				{% csrf_token %}
+				<!--label for="group">Group</label><br>
+				<input type="text" name="group" value="" id="group"><br-->
+				<label for="email"> UserEmail </label>
+				<input type="text" name="email" value="" id="email"><br>
+				<label for="password">Password</label>
+				<input type="password" name="password" value="" id="password"><br>
+				<input type="submit" value="Submit" />
+				</form>
+			
+                <hr>
+
+                <p>{% trans "Forgot your password?" %} <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>.</p>
+                <p>{% trans "Not a member?" %} <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>.</p>
+               
+
+                
+            </div>
+            
+        </div>
+    </div>
+    <div class="col-md-4">
+    </div>
+</div>
+{% endblock %}
+
+{% comment %}
+**registration/login.html**
+
+It's your responsibility to provide the login form in a template called
+registration/login.html by default. This template gets passed four
+template context variables:
+
+``form``
+    A Form object representing the login form. See the forms
+    documentation for more on Form objects.
+
+``next``
+    The URL to redirect to after successful login. This may contain a
+    query string, too.
+
+``site``
+    The current Site, according to the SITE_ID setting. If you don't
+    have the site framework installed, this will be set to an instance
+    of RequestSite, which derives the site name and domain from the
+    current HttpRequest.
+
+``site_name``
+    An alias for site.name. If you don't have the site framework
+    installed, this will be set to the value of
+    request.META['SERVER_NAME']. For more on sites, see The
+    "sites" framework.
+{% endcomment %}

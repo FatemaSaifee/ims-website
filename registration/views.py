@@ -224,39 +224,39 @@ def get_user(email):
     except User.DoesNotExist:
         return None
 
-# create a view that authenticate user with email
-def email_login_view(request):
-    # def accountLoginView(request):
-    context= {}
-    context['program_list'] = []#Program.objects.all()
-    context.update(csrf(request))
-    return render_to_response('general/account_login.html', context)
+# # create a view that authenticate user with email
+# def email_login_view(request):
+#     # def accountLoginView(request):
+#     context= {}
+#     context['program_list'] = []#Program.objects.all()
+#     context.update(csrf(request))
+#     return render_to_response('general/account_login.html', context)
     
-def authenticate_login(request):
+# def authenticate_login(request):
     
-    email = request.POST['email']
-    password = request.POST['password']
-    username = get_user(email)
-    user = authenticate(username=username, password=password)
+#     email = request.POST['email']
+#     password = request.POST['password']
+#     username = get_user(email)
+#     user = authenticate(username=username, password=password)
 
-    if user is not None:
-        try:
-            Student.objects.get(user=request.user.id)
-            is_student = True
-        except Student.DoesNotExist:
-            is_student = False
-        try:
-            Faculty.objects.get(user=request.user.id)
-            is_faculty = True
-        except Faculty.DoesNotExist:
-            is_faculty = False
-        # pdb.set_trace()
-        if is_student == True:
+#     if user is not None:
+#         try:
+#             Student.objects.get(user=request.user.id)
+#             is_student = True
+#         except Student.DoesNotExist:
+#             is_student = False
+#         try:
+#             Faculty.objects.get(user=request.user.id)
+#             is_faculty = True
+#         except Faculty.DoesNotExist:
+#             is_faculty = False
+#         # pdb.set_trace()
+#         if is_student == True:
             
-            return HttpResponseRedirect('/students')
-        elif is_faculty == True:
+#             return HttpResponseRedirect('/students')
+#         elif is_faculty == True:
             
-            return HttpResponseRedirect('/faculty')
+#             return HttpResponseRedirect('/faculty')
 
     return HttpResponseRedirect('/accounts/invalid/')
     # if user is not None:

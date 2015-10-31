@@ -1,5 +1,5 @@
 """
-URLconf for registration and activation, using django-registration's
+URLconf for registration and activation, using django1-registration's
 default backend.
 
 If the default behavior of these views is acceptable to you, simply
@@ -9,7 +9,7 @@ for registration::
     (r'^accounts/', include('registration.backends.default.urls')),
 
 This will also automatically set up the views in
-``django.contrib.auth`` at sensible default locations.
+``django1.contrib.auth`` at sensible default locations.
 
 If you'd like to customize registration behavior, feel free to set up
 your own URL patterns for these views instead.

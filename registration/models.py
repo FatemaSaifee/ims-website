@@ -241,7 +241,9 @@ class RegistrationManager(models.Manager):
 
 
 # @python_2_unicode_compatible
-# class RegistrationProfile(models.Model):
+class RegistrationProfile(models.Model):
+
+    RegistrationProfile = models.OneToOneField('general.RegistrationProfile', default=-1)
 #     """
 #     A simple profile which stores an activation key for use during
 #     user account registration.

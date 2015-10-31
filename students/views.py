@@ -171,10 +171,7 @@ def StudentView(request):
     #context['Student']=request.user.Student #Student.objects.get('User'=request__user)#request.user.Student
     
 
-    
-
-
-
+@login_required
 def ShelfView(request):
     context= {}
     context['program_list'] = Program.objects.all()

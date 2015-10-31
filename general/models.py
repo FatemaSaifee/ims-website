@@ -216,7 +216,7 @@ class RegistrationProfile(models.Model):
 
 
 class Student(RegistrationProfile):
-    Batch = models.ForeignKey('students.Batch')
+    Batch = models.ForeignKey('students.Batch',null=True)
     Father_Name =models.CharField(max_length=200)
     Mother_Name =models.CharField(max_length=200)
     DOB= models.DateField(max_length=200)

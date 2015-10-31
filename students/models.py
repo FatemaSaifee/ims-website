@@ -80,41 +80,28 @@ class Time_Table(models.Model):
 
 class Book(models.Model):
     Batch = models.ForeignKey(Batch)
-    Title = models.CharField(max_length=100)
+    Title = models.CharField(max_length=100, unique=True)
     Docfile = models.FileField(upload_to='documents/books/')
-    pub_date = models.DateTimeField('date published')
+    pub_date = models.DateTimeField('date published', null=True)
     
     def __unicode__(self):  # Python 3: def __str__(self):
         return self.Title
 
-# class BookForm(ModelForm):
-#     class Meta:
-#         model = Book
-#         exclude = ['Batch']
-#         #fields = '__all__'
-#         error_messages = {
-#             NON_FIELD_ERRORS: {
-#                 'unique_together': "%(model_name)s's %(field_labels)s are not unique.",
-#             }
-#         }
-        
-#     # def get_absolute_url(self):
-#     #     return reverse('events:team-detail', kwargs={'pk': self.pk})
 
 class Question_Paper(models.Model):
     Batch = models.ForeignKey(Batch)
-    Title = models.CharField(max_length=100)
+    Title = models.CharField(max_length=100, unique=True)
     Question_Paper = models.FileField(upload_to='documents/books/')
-    pub_date = models.DateTimeField('date published')
+    pub_date = models.DateTimeField('date published', null=True)
     
     def __unicode__(self):  # Python 3: def __str__(self):
         return self.Title
 
 class Link(models.Model):
     Batch = models.ForeignKey(Batch)
-    Title = models.CharField(max_length=100)
-    URL = models.URLField()
-    pub_date = models.DateTimeField('date published')
+    Title = models.CharField(max_length=100, unique=True)
+    URL = models.URLField(unique=True)
+    pub_date = models.DateTimeField('date published', null=True)
     
     def __unicode__(self):  # Python 3: def __str__(self):
         return self.Title

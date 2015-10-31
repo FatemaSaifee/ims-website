@@ -13,19 +13,19 @@
             
 
                 {% for question_paper in question_paper_list %}
-                <span class='glyphicon glyphicon-pushpin' ></span>
+                <span class='glyphicon glyphicon-hourglass' ></span>
                 <a href="{{question_paper.Link}}" target="_blank">{{ question_paper.Title }} </a></br>
                 {% endfor %}
             
             {% else %}
-                <p>No Notification are available.</p>
+                <p>No Qusetion Paper are available.</p>
             {% endif %}
 
         </div>
     </div>
     <section id="portfolio" class="bg-light-gray">
        <div class="col-md-4 col-sm-6 portfolio-item">
-            <a class="btn btn-primary" href="#edit-shelf" class="portfolio-link" data-toggle="modal">Add</a>
+            <a id='question_paper' class="btn btn-primary" href="#questionpaper" class="portfolio-link" data-toggle="modal">Add</a>
         </div>
     </section>
 </div>
@@ -40,19 +40,19 @@
             
 
                 {% for book in book_list %}
-                <span class='glyphicon glyphicon-pushpin' ></span>
-                <a href="{{book.Link}}" target="_blank">{{ book.Title }} </a></br>
+                <span class='glyphicon glyphicon-book' ></span>
+                <a id='book' href="{{book.Link}}" target="_blank">{{ book.Title }} </a></br>
                 {% endfor %}
             
             {% else %}
-                <p>No Notification are available.</p>
+                <p>No Books are available.</p>
             {% endif %}
 
         </div>
     </div>
     <section id="portfolio" class="bg-light-gray">
        <div class="col-md-4 col-sm-6 portfolio-item">
-            <a class="btn btn-primary" href="#edit-shelf" class="portfolio-link" data-toggle="modal">Add</a>
+            <a class="btn btn-primary" href="#book" class="portfolio-link" data-toggle="modal">Add</a>
         </div>
     </section>
 </div>
@@ -67,26 +67,29 @@
             
 
                 {% for link in link_list %}
-                <span class='glyphicon glyphicon-pushpin' ></span>
-                <a href="{{link.Link}}" target="_blank">{{ link.Title }} </a></br>
+                <span class='glyphicon glyphicon-link' ></span>
+                <a id='link' href="{{link.Link}}" target="_blank">{{ link.Title }} </a></br>
                 {% endfor %}
             
             {% else %}
-                <p>No Notification are available.</p>
+                <p>No Links are available.</p>
             {% endif %}
 
         </div>
     </div>
     <section id="portfolio" class="bg-light-gray">
        <div class="col-md-4 col-sm-6 portfolio-item">
-            <a class="btn btn-primary" href="#edit-shelf" class="portfolio-link" data-toggle="modal">Add</a>
+            <a class="btn btn-primary" href="#link" class="portfolio-link" data-toggle="modal">Add</a>
         </div>
     </section>
 </div>
 
 
 <!-- the hidden block of add buttons -->
-<div class="portfolio-modal modal fade" id="edit-shelf" tabindex="-1" role="dialog" aria-hidden="true">
+
+
+
+<div class="portfolio-modal modal fade" id="link" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-content">
             <div class="close-modal" data-dismiss="modal">
                 <div class="lr">
@@ -99,18 +102,40 @@
                     <div class="col-lg-8 col-lg-offset-2">
                         <div class="modal-body">
                             <!-- Project Details Go Here -->
-                            <h2>Project Name</h2>
-                            <p class="item-intro text-muted">Lorem ipsum dolor sit amet consectetur.</p>
-                            <img class="img-responsive img-centered" src="img/portfolio/roundicons-free.png" alt="">
-                            <p>Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!</p>
-                            <p>
-                                <strong>Want these icons in this portfolio item sample?</strong>You can download 60 of them for free, courtesy of <a href="https://getdpd.com/cart/hoplink/18076?referrer=bvbo4kax5k8ogc">RoundIcons.com</a>, or you can purchase the 1500 icon set <a href="https://getdpd.com/cart/hoplink/18076?referrer=bvbo4kax5k8ogc">here</a>.</p>
-                            <ul class="list-inline">
-                                <li>Date: July 2014</li>
-                                <li>Client: Round Icons</li>
-                                <li>Category: Graphic Design</li>
-                            </ul>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
+                            <form method="post">
+                                {% csrf_token %}
+                               {{ link_form.as_p}}
+                               <input type="submit" name = "link" value="Add Link" class="submit btn btn-primary" />
+                            </form>
+                            <br>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="portfolio-modal modal fade" id="book" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <!-- Project Details Go Here -->
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                               {{ book_form.as_p}}
+                               <input type="submit" name="book" value="Add Book" class="submit btn btn-primary" />
+                            </form>
+                            <br>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
                         </div>
                     </div>
                 </div>
@@ -119,7 +144,32 @@
     </div>
 
 
-
+<div class="portfolio-modal modal fade" id="questionpaper" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <!-- Project Details Go Here -->
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                               {{ question_paper_form.as_p}}
+                               <input type="submit" name="question_paper" value="Add Question Paper" class="submit btn btn-primary" />
+                            </form>
+                            <br>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 <script src="{% static 'general/agency/js/jquery.js' %}"></script>

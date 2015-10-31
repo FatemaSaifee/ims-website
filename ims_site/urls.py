@@ -31,6 +31,9 @@ admin.autodiscover()
 
 
 urlpatterns = [
+    url(r'^static/(?P<path>.*)$',
+    'django.views.static.serve',
+    {'document_root': settings.STATIC_ROOT}),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^faculty/', include('faculty.urls',namespace = "faculty")),
     url(r'^students/', include('students.urls',namespace = "students")),
@@ -40,7 +43,7 @@ urlpatterns = [
     url(r'^chat/', include('jqchat.urls', namespace = "chat")),
 
 
-
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT, settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()

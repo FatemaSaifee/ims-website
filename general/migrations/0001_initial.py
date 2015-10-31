@@ -10,7 +10,6 @@ class Migration(migrations.Migration):
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('jqchat', '__first__'),
-        ('students', '__first__'),
     ]
 
     operations = [
@@ -116,7 +115,6 @@ class Migration(migrations.Migration):
                 ('Roll_Number', models.CharField(default=None, max_length=200)),
                 ('Enrollment_Number', models.CharField(default=None, max_length=200)),
                 ('Picture', models.URLField(default=None, blank=True)),
-                ('Batch', models.ForeignKey(to='students.Batch')),
             ],
             bases=('general.registrationprofile',),
         ),

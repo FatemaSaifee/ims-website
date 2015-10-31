@@ -1,8 +1,9 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from general.models import Program, Course, News, Notification, Contact
 from students.models import *
 from general.models import *
 from registration.forms import FacultyForm
+from .forms import *
 from django.contrib.auth.models import User
 from django.views.generic.list import ListView
 from django.views.generic.detail import SingleObjectMixin
@@ -14,8 +15,11 @@ from django.views.generic.edit import UpdateView
 # from django.views import generic
 # from django.utils import timezone
 from django.shortcuts import render, render_to_response
+from django.views.generic import CreateView
 
 import pdb
+
+from datetime import datetime
 
 # @login_required
 class HomeView(ListView):
@@ -113,12 +117,13 @@ class FacultyInfoView(ListView):
         return ctx  
 
 
-# @login_required
+@login_required
 def FacultyView(request):
     context= {}
     context['program_list'] = Program.objects.all()
     context['time_slot_list'] = Time_Slot.objects.all()
-    context['notification_list'] = Notification.objects.all().order_by('-pub_date')[:5]
+    context['notification_list'] = Notification.objects.all().order_by('-pub_date')[:3]
+    context['news_list'] = News.objects.all().order_by('-pub_date')[:3]
     context['user']=request.user
     # time table lists
     
@@ -141,21 +146,95 @@ def FacultyView(request):
     #context['profile']=request.user.profile #Profile.objects.get('User'=request__user)#request.user.profile
     
 
+ 
+class ShelfCreateView(CreateView):
+    template_name = 'faculty/shelf.html'
+    success_url = 'success'
+    form_class = BookForm
+
+    def get(self, request, *args, **kwargs):
+        """
+        Handles GET requests and instantiates a blank version of the form.
+        """
+        self.object = None
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        book_form = BookForm
+        link_form = LinkForm
+        question_paper_form = QuestionPaperForm
+        return self.render_to_response(self.get_context_data(form=form,
+            book_form =  book_form,
+            link_form = link_form,
+            question_paper_form = question_paper_form,
+            book_list = Book.objects.all(),
+            question_paper_list = Question_Paper.objects.all(),
+            link_list = Link.objects.all(),))
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests, instantiating a form instance and its inline
+        formsets with the passed POST variables and then checking them for
+        validity.
+        """
+        self.object = None
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        # pdb.set_trace()
+        if'book' in self.request.POST:
+            book_form = BookForm(self.request.POST, self.request.FILES)
+            # book_form.cleaned_data['pub_date'] = datetime.now()
+            # pdb.set_trace()
+            if book_form.is_valid():
+                # pdb.set_trace()
+                book_form.pub_date = datetime.now()
+                # pdb.set_trace()
+                book_form.save()
+                return HttpResponseRedirect('/faculty/shelf')
+            else:
+                return render_to_response(book_form = book_form)
+
+
+        elif'link' in self.request.POST:
+            link_form = LinkForm(self.request.POST, self.request.FILES)
+            if link_form.is_valid():
+                link_form.pub_date = datetime.now()
+                link_form.save()
+                return HttpResponseRedirect('/faculty/shelf')
+            else:
+                return render_to_response(link_form = link_form)
+
+        elif'question_paper' in self.request.POST:
+            question_paper_form = QuestionPaperForm(self.request.POST, self.request.FILES)
+
+            if question_paper_form.is_valid():
+                # pdb.set_trace()
+                question_paper_form.pub_date = datetime.now()
+                question_paper_form.save()
+                return HttpResponseRedirect('/faculty/shelf')
+            else:
+                return render_to_response(question_paper_form = question_paper_form)
+        else:
+            return self.render_to_response(self.get_context_data(form=form,
+                 book_form =  BookForm,
+                 link_form = LinkForm,
+                 question_paper_form = QuestionPaperForm,))
+
+   
+
+
+
+# def ShelfView(request):
+#     context= {}
+#     context['program_list'] = Program.objects.all()
+#     context['user']=request.user
+#     context['profile']=request.user.registrationprofile.faculty #Profile.objects.get('User'=request__user)#request.user.profile
+#     context['book_list'] = Book.objects.all()
+#     context['question_paper_list'] = Question_Paper.objects.all()
+#     context['link_list'] = Link.objects.all()
     
+#     return render_to_response('faculty/shelf.html', context)
 
-
-
-def ShelfView(request):
-    context= {}
-    context['program_list'] = Program.objects.all()
-    context['user']=request.user
-    context['profile']=request.user.registrationprofile.faculty #Profile.objects.get('User'=request__user)#request.user.profile
-    context['book_list'] = Book.objects.all()
-    context['question_paper_list'] = Question_Paper.objects.all()
-    context['link_list'] = Link.objects.all()
-    
-    return render_to_response('faculty/shelf.html', context)
-
+@login_required
 def ProfileView(request):
     context= {}
     context['program_list'] = Program.objects.all()
@@ -164,6 +243,7 @@ def ProfileView(request):
     
     return render_to_response('faculty/profile.html', context)
 
+@login_required
 def ChatroomView(request):
     context= {}
     context['program_list'] = Program.objects.all()

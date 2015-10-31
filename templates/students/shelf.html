@@ -13,7 +13,7 @@
             
 
                 {% for question_paper in question_paper_list %}
-                <span class='glyphicon glyphicon-pushpin' ></span>
+                <span class='glyphicon glyphicon-hourglass' ></span>
                 <a href="{{question_paper.Link}}" target="_blank">{{ question_paper.Title }} </a></br>
                 {% endfor %}
             
@@ -35,7 +35,7 @@
             
 
                 {% for book in book_list %}
-                <span class='glyphicon glyphicon-pushpin' ></span>
+                <span class='glyphicon glyphicon-book' ></span>
                 <a href="{{book.Link}}" target="_blank">{{ book.Title }} </a></br>
                 {% endfor %}
             
@@ -57,7 +57,7 @@
             
 
                 {% for link in link_list %}
-                <span class='glyphicon glyphicon-pushpin' ></span>
+                <span class='glyphicon glyphicon-link' ></span>
                 <a href="{{link.Link}}" target="_blank">{{ link.Title }} </a></br>
                 {% endfor %}
             
