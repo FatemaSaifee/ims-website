@@ -9,7 +9,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('jqchat', '__first__'),
     ]
 
     operations = [
@@ -17,8 +16,6 @@ class Migration(migrations.Migration):
             name='ChatRoom',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('Room', models.ForeignKey(to='jqchat.Room', unique=True)),
-                ('User', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
