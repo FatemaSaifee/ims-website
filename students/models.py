@@ -31,8 +31,14 @@ class Batch(models.Model):
         return str(self.Course.name + ' ' + self.Semester)
         
 
-    
+class Subject(models.Model):
+    ID = models.CharField(max_length=10, primary_key=True)
+    Batch = models.ForeignKey('students.Batch') 
+    Name = models.CharField(max_length=40)
+    Faculty = models.ForeignKey('general.Faculty') 
 
+    def __unicode__(self):  # Python 3: def __str__(self)
+        return self.Name
 
 class Time_Slot(models.Model):
     
@@ -42,9 +48,6 @@ class Time_Slot(models.Model):
 
     def __unicode__(self):  # Python 3: def __str__(self):
         return str(self.Start_Time) + ' - ' + str(self.End_Time)
-
-
-    
 
 class Time_Table(models.Model):
     DAY_CHOICES = (
@@ -57,13 +60,12 @@ class Time_Table(models.Model):
     )
     Day = models.CharField(max_length=1, choices=DAY_CHOICES)
     Time_Slot = models.ForeignKey(Time_Slot)
-    Subject = models.CharField(max_length=20)
-    Subject_Id = models.CharField(max_length=10)
+    Subject = models.ForeignKey(Subject)
     Faculty = models.ForeignKey('general.Faculty')
     Batch = models.ForeignKey(Batch)
 
     def __unicode__(self):  # Python 3: def __str__(self):
-        return self.Subject
+        return str(self.Subject)
 
    
 # class Notification(models.Model):

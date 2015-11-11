@@ -6,8 +6,12 @@ class TimeTableInLine(admin.TabularInline):
 	model = Time_Table
 	extra = 1
 
+class SubjectInLine(admin.TabularInline):
+	model = Subject
+	extra = 1
+
 class BatchAdmin(admin.ModelAdmin):
-	inlines = [TimeTableInLine]
+	inlines = [TimeTableInLine, SubjectInLine]
 
 class TimeSlotInLine(admin.TabularInline):
 	model = Time_Slot
@@ -27,3 +31,4 @@ admin.site.register(Slot, SlotAdmin)
 admin.site.register(Question_Paper)
 admin.site.register(Link)
 admin.site.register(Book)
+# admin.site.register(Subject)

@@ -47,12 +47,12 @@ class Account_HomeView(ListView):
                 ctx['accountbase'] = 'faculty/base.html'
         return ctx
 
-class AccountProgramView(ListView):
-    model = Program
-    template_name = 'general/account-program.html'
+# class AccountProgramView(ListView):
+#     model = Program
+#     template_name = 'general/account-program.html'
 
-    def get_queryset(self):
-        return Program.objects.all()
+#     def get_queryset(self):
+#         return Program.objects.all()
 
 
 # @login_required
@@ -263,12 +263,12 @@ class HomeView(ListView):
         
         return ctx
 
-class ProgramView(ListView):
-    model = Program
-    template_name = 'general/program.html'
+# class ProgramView(ListView):
+#     model = Program
+#     template_name = 'general/program.html'
 
-    def get_queryset(self):
-        return Program.objects.all()
+#     def get_queryset(self):
+#         return Program.objects.all()
 
 
 
@@ -282,12 +282,25 @@ class ProgramDetailView(SingleObjectMixin, ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super(ProgramDetailView, self).get_context_data(**kwargs)
+        # pdb.set_trace()
         ctx['program_list'] = Program.objects.all()
         ctx['course_list'] = Course.objects.all()
 
         return ctx
     def get_queryset(self):
         return self.object.course_set.all()
+
+class FacultyDetailView(generic.DetailView):
+    
+    template_name = "general/facultydetail.html"
+    model = Faculty
+
+    def get_context_data(self, **kwargs):
+        ctx = super(FacultyDetailView, self).get_context_data(**kwargs)
+        ctx['program_list'] = Program.objects.all()
+        
+
+        return ctx
 
 
 

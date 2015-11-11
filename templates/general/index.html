@@ -62,15 +62,16 @@
     </header>
 
 <marquee direction="right"  class="navbar-inverse" onmouseover="this.stop();" onmouseout="this.start();">
-    
+    <ul class="list-inline">
         {% for news in news_list %}
-            <a href="{{news.Link}}" target="_blank" class=".navbar-link:hover" id="news"> # {{ news.Title }} </a> 
+            <li type="square"><a href="{{notification.Link}}" target="_blank" style="color : #CCC; font-size : 18px" onMouseOver="this.style.color='#FFF'"
+   onMouseOut="this.style.color='#CCC'">** {{ news.Title }} </a> </li>
         {% endfor %}
         {% for notification in notification_list %}
-            <a href="{{notification.Link}}" target="_blank" style="color : #CCC; font-size : 18px" onMouseOver="this.style.color='#FFF'"
-   onMouseOut="this.style.color='#CCC'"> # {{ notification.Title }} </a>
+            <li type="square"><a href="{{notification.Link}}" target="_blank" style="color : #CCC; font-size : 18px" onMouseOver="this.style.color='#FFF'"
+   onMouseOut="this.style.color='#CCC'">  ** {{ notification.Title }} </a></li>
         {% endfor %}
-    
+    </ul>    
 </marquee>
     <!-- Page Content -->
      <div class="container">
@@ -87,7 +88,7 @@
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4><i class="glyphicon glyphicon-bullhorn"></i>  Notification </h4>
+                        <h4><i class="glyphicon glyphicon-bullhorn"></i>  This Month's Notification </h4>
                     </div>
                     <div class="panel-body">
                         
@@ -95,19 +96,16 @@
                                 <!-- <div class="input-group">
                                     <form action="" method="get"> -->
                                     
-                                        <div id="newsreportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-                                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-                                            <span></span> <b class="caret" align="right"></b>
-                                        </div>
-                                        <hr>
+                                        
+                                        
                                         
                            <div id = "news">
-                            
+                            <marquee direction="up">
                                 {% for news in news_list %}
                                     <span class='glyphicon glyphicon-download-alt' ></span>
                                     <a href="{{news.Link}}" target="_blank">{{ news.Title }} </a></br>
                                 {% endfor %}
-                            
+                            </marquee>
                             </div>
 
                     </div>

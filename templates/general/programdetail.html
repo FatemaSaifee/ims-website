@@ -28,36 +28,80 @@
 
                 <div id="myTabContent" class="tab-content">
                 	{% for course in program.course_set.all %}
-                	{% if forloop.counter == 1 %}
-					<div class="tab-pane fade active in" id="tabs-{{ course.id }}">
-					<br>
-					<p>{{ course.description|linebreaks|safe }}</p>
+	                	{% if forloop.counter == 1 %}
+							<div class="tab-pane fade active in" id="tabs-{{ course.id }}">
+								<br>
+								<p>{{ course.description|linebreaks|safe }}</p>
 
-					<hr>
-					<h4>Objective</h4>
-					<hr>
-					<p>{{ course.objective|linebreaks|safe }}</p>
+								<hr>
+								<h4>Objective</h4>
+								<hr>
+								<p>{{ course.objective|linebreaks|safe }}</p>
 
-					<hr>
-					<h4>Learning Outcomes</h4>
-					<hr>
-					<p>{{ course.learning_outcomes|linebreaks|safe }}</p></div>
-					{% else %}
-					<div class="tab-pane fade" id="tabs-{{ course.id }}">
-					<br>
-					<p>{{ course.description|linebreaks|safe }}</p>
-					
-					<hr>
-					<h4>Objective</h4>
-					<hr>
-					<p>{{ course.objective|linebreaks|safe }}</p>
+								
+								<hr>
+								<h4>Subjects</h4>
+								<hr>
+								
+								<div class="row">
+					            <div class="col-lg-12">
+				                <div class="panel-group" id="accordion">
+				                	{% for batch in course.batch_set.all %}
+				                    <div class="panel panel-default">
+			                        <div class="panel-heading">
+			                            <h4 class="panel-title">
+			                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#{{batch.Semester}}">{{ batch.Semester }} Semester </a>
+			                            </h4>
+			                        </div>
 
-					<hr>
-					<h4>Learning Outcomes</h4>
-					<hr>
-					<p>{{ course.learning_outcomes|linebreaks|safe }}</p></div>
-					
-                    {% endif %}
+			                        <div id="{{batch.Semester}}" class="panel-collapse collapse">
+			                            <div class="panel-body">
+			                            <table  class="table table-striped">
+										    <thead>
+										      <tr>
+										      	<th> S.No.</th>
+										      	<th> Subject </th>
+										        <th>Subject ID </th>
+										        <th> Faculty </th>
+										      </tr>
+										    </thead>
+			                                {% for subject in batch.subject_set.all %}
+			                                <tr>
+			                                	<td> {{ forloop.counter }} </td>
+			                                	<td> {{ subject }} </td>
+			                                	<td> {{ subject.ID }} </td>
+			                                	<td> <a href="{% url 'general:facultydetail' subject.Faculty.id %}"> {{ subject.Faculty }} </a> </td>
+			                                </tr>
+			                                {% endfor %}
+			                            </table>
+			                            </div>
+			                        </div>
+			                    </div>
+			                    {% endfor %}
+			                    
+			                </div>
+			                </div>
+			                </div>
+			                </div>
+			                
+
+						{% else %}
+							<div class="tab-pane fade" id="tabs-{{ course.id }}">
+								<br>
+								<p>{{ course.description|linebreaks|safe }}</p>
+								
+								<hr>
+								<h4>Objective</h4>
+								<hr>
+								<p>{{ course.objective|linebreaks|safe }}</p>
+
+								<hr>
+								<h4>Learning Outcomes</h4>
+								<hr>
+								<p>{{ course.learning_outcomes|linebreaks|safe }}</p>
+							</div>
+								
+	                    {% endif %}
 					{% endfor %}
                 </div>
 

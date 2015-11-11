@@ -1,5 +1,5 @@
 from django.contrib import admin
-from general.models import * 
+from general.models import *
 #from nested_inline.admin import NestedStackedInline, NestedModelAdmin, NestedTabularInline 
 #from example.models import *
 
@@ -43,10 +43,12 @@ class ContactAdmin(admin.ModelAdmin):
 	list_display = ('Heading','Description')
 
 
+
 admin.site.register(Program, ProgramAdmin)
 admin.site.register(News,NewsAdmin)
 admin.site.register(Notification,NotificationAdmin)
 admin.site.register(Contact,ContactAdmin)
+# admin.site.register(Batch, BatchAdmin)
 #admin.site.register(Student)
 
 #admin.site.register(Course)

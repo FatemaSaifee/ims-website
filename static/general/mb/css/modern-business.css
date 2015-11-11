@@ -95,22 +95,3 @@ footer {
     color: red;
 }
 
-/* unvisited link */
-.news a:link {
-    color: red;
-}
-
-/* visited link */
-a:visited .news{
-    color: green;
-}
-
-/* mouse over link */
-a:hover {
-    color: hotpink;
-}
-
-/* selected link */
-a:active {
-    color: blue;
-}

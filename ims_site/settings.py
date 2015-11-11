@@ -31,7 +31,7 @@ INSTALLED_APPS = (
     'registration',
     'general',
     'multiform',
-    'django_filters',
+    # 'django_filters',
     # 'south',
 )
 MIDDLEWARE_CLASSES = (
