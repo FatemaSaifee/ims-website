@@ -1,0 +1,63 @@
+{% extends 'general/base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+<!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{faculty.Name }}
+                    
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a onClick="javascript:history.go(-1);">Programs</a></li>
+                    <li class="active">{{faculty.Name }}</li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+<!-- Block Content -->
+<h1>{{faculty.Name }}</h1>
+<hr>
+<div class="row">
+            <div class="col-md-3">
+                
+                    <img width="80%" height="80%" class="img-responsive " src="{{faculty.Picture}}" alt="">
+                
+            </div>
+            <div class="col-md-8">
+                <table class="table">
+                	<tr>
+                		<th>Name</th>
+                		<td> {{faculty.Name }}</td>
+                	</tr>
+                	<tr>
+                		<th>Qualification</th>
+                		<td>{{ faculty.Qualification}}</td>
+                	</tr>
+                	<tr>
+                		<th>Designation</th>
+                		<td>{{ faculty.Designation }}</td>
+                	</tr>
+                	<tr>
+                		<th>Joining Date</th>
+                		<td>{{ faculty.DOJ }}</td>
+                	</tr>
+                	<tr>
+                		<th>Previous Job</th>
+                		<td>{{ faculty.Previous_Job }}</td>
+                	</tr>
+                	<!-- <tr>
+                		<th>Roll Number</th>
+                		<td>{{ user.faculty.Roll_Number }}</td>
+                	</tr> -->
+                	<tr>
+                		<th>Area of innterest</th>
+                		<td>{{ faculty.Area_Of_Interest }}</td>
+                	</tr>
+                </table>
+            </div>
+</div>
+
+{% endblock %}

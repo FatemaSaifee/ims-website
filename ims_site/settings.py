@@ -77,12 +77,13 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-STATICFILES_DIRS = (
-os.path.join(BASE_DIR, "static"),
-'/var/www/static/',
-)
+# STATICFILES_DIRS = (
+# os.path.join(BASE_DIR, "static"),
+# '/var/www/static/',
+# )
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
+STATIC_ROOT = '/var/www/ims-website/static/'
 STATIC_URL = '/static/'
 #Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home2/media/media.lawrence.com/media/"
