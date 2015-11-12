@@ -83,8 +83,12 @@ USE_TZ = True
 # )
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
-STATIC_ROOT = '/var/www/ims-website/static/'
+STATIC_ROOT = ''
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+os.path.join(BASE_DIR, "static"),
+'/var/www/ims-website/static/',
+)
 #Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home2/media/media.lawrence.com/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
