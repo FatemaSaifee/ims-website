@@ -13,7 +13,7 @@ from django.core.context_processors import csrf
 from django.shortcuts import render_to_response
 import pdb
 
-import django_filters
+#import django_filters
 
 
 class Account_HomeView(ListView):
