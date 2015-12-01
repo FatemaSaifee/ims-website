@@ -100,7 +100,7 @@
                                         
                                         
                            <div id = "news">
-                            <marquee direction="up">
+                            <marquee direction="up" onmouseover="this.stop();" onmouseout="this.start();">
                                 {% for news in news_list %}
                                     <span class='glyphicon glyphicon-download-alt' ></span>
                                     <a href="{{news.Link}}" target="_blank">{{ news.Title }} </a></br>
