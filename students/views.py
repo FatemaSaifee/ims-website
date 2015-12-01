@@ -157,7 +157,7 @@ def StudentView(request):
         context[day] = []
         day_number += 1
         student = Student.objects.get(user = request.user)
-        time_table = student.Batch.time_table_set.filter(Day=day_number)
+        time_table = request.user.registrationprofile.student.Batch.time_table_set.filter(Day=day_number)
         for time in student.Batch.Slot.time_slot_set.all():
             for item in time_table:
                 if item.Time_Slot == time:
