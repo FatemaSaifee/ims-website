@@ -1,4 +1,4 @@
-# ims-website
+# IMS Portal for MBA-Executives graduate students and falculties
 
 Built a student portal with online registration, admin verification and email confirmation.
 Developed features using Python-Django & SQLite for student and faculty such as:
